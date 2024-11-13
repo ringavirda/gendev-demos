@@ -14,3 +14,6 @@
 
 # Node modules.
 node_modules/
+
+# Rendered files.
+**/dist/
