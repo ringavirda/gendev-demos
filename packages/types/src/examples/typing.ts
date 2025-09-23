@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ExamplesBase, registerExamples } from "../examples.js";
 
 @registerExamples()
@@ -64,7 +65,7 @@ export class TypingExamples extends ExamplesBase {
     };
 
     addPower({ name: "Chrysalis" });
-    // addPower({name: "Trixie"}); // Compiler will complain.
+    // addPower({ name: "Trixie" }); // Compiler will complain.
   }
 
   exampleAsConst() {

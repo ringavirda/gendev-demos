@@ -22,16 +22,16 @@ export function runExamples<T extends typeof ExamplesBase>(classes: Array<T>) {
     if (examples === undefined || examples.size === 0)
       console.log(
         chalk.yellow(
-          `Class [${chalk.underline(cls.name)}] has no examples to run.`
-        )
+          `Class [${chalk.underline(cls.name)}] has no examples to run.`,
+        ),
       );
     else {
       console.log(
         chalk.green(
           `Class [${chalk.underline(cls.name)}] has ${
             examples.size
-          } examples.\nPerforming sequential run:`
-        )
+          } examples.\nPerforming sequential run:`,
+        ),
       );
       const context = new (Object.create(cls.prototype).constructor)();
       for (const ex of examples.keys()) {
@@ -59,7 +59,7 @@ export function registerExamples<T extends typeof ExamplesBase>() {
     keys
       .map((k) => k.toString())
       .forEach((key) => {
-        if (key.startsWith("example") || key.startsWith("ex")) {
+        if (key.startsWith("example")) {
           if (examples.get(key) !== null)
             examples.set(key, (target.prototype as any)[key]);
         }

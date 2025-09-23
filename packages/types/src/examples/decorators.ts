@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { ExamplesBase, registerExamples } from "../examples.js";
 
 @registerExamples()
@@ -6,6 +7,7 @@ export class DecoratorsExamples extends ExamplesBase {
     const context = this;
 
     @classDecorator("Hello from decorator!")
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     class Decorated {
       constructor() {
         context.log("Decorated initialized.");
@@ -30,7 +32,7 @@ export class DecoratorsExamples extends ExamplesBase {
 
       @methodDecorator("Hello from decorator again!")
       public decorated() {
-        context.log("decorated was invoked.");
+        context.log(`decorated was invoked, this: ${this}`);
       }
     }
 
@@ -54,7 +56,7 @@ export class DecoratorsExamples extends ExamplesBase {
       private _field: string = "hey there!";
 
       public getFormattedField() {
-        let formatString = getFormat(this, "_field");
+        const formatString = getFormat(this, "_field");
         return formatString.replace("{}", this._field);
       }
     }
@@ -80,48 +82,48 @@ export class DecoratorsExamples extends ExamplesBase {
       public manyArgs(
         @required() first?: string,
         second?: number,
-        @required() third?: boolean
+        @required() third?: boolean,
       ) {
         context.log(`f: ${first}, s: ${second}, t: ${third}`);
       }
     }
 
     function required() {
-      return function (target: Object, key: string | symbol, index: number) {
-        let existingRequiredParameters: number[] =
+      return function (target: object, key: string | symbol, index: number) {
+        const existingRequiredParameters: number[] =
           Reflect.getOwnMetadata(requiredMetadataKey, target, key) ?? [];
         existingRequiredParameters.push(index);
         Reflect.defineMetadata(
           requiredMetadataKey,
           existingRequiredParameters,
           target,
-          key
+          key,
         );
       };
     }
 
     function validate() {
       return function (target: any, key: string, desc: PropertyDescriptor) {
-        let method = desc.value;
+        const method = desc.value;
 
-        desc.value = function () {
-          let requiredParameters: number[] = Reflect.getOwnMetadata(
+        desc.value = function (...args: any[]) {
+          const requiredParameters: number[] = Reflect.getOwnMetadata(
             requiredMetadataKey,
             target,
-            key
+            key,
           );
           if (requiredParameters) {
-            for (let parameterIndex of requiredParameters) {
+            for (const parameterIndex of requiredParameters) {
               if (
-                parameterIndex >= arguments.length ||
-                arguments[parameterIndex] === undefined
+                parameterIndex >= args.length ||
+                args[parameterIndex] === undefined
               ) {
                 context.log("Missing required argument.");
                 return;
               }
             }
           }
-          return method?.apply(this, arguments);
+          return method?.apply(this, args);
         };
       };
     }

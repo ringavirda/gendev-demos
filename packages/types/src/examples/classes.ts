@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { ExamplesBase, registerExamples } from "../examples.js";
 
 @registerExamples()
@@ -65,6 +66,7 @@ export class ClassExamples extends ExamplesBase {
     // No diamond inheritance.
     this.separator();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     class Unicorn extends Pony {
       constructor(name: string) {
         super(name);
@@ -112,12 +114,12 @@ export class ClassExamples extends ExamplesBase {
     abstract class Flier {
       constructor(protected _name: string) {}
       abstract fly(): void;
-      abstract fly(distance: number): void; // Static poly is not supported.
+      // abstract fly(distance: number): void; // Static poly is not supported.
     }
 
     class Pegasus extends Flier {
       public override fly(): void {
-        // context.log(`${this._name}: she flies fast!`);
+        context.log(`${this._name}: she flies fast!`);
       }
     }
 

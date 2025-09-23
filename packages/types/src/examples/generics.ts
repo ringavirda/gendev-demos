@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { ExamplesBase, registerExamples } from "../examples.js";
 
 @registerExamples()
@@ -9,11 +10,10 @@ export class GenericExamples extends ExamplesBase {
       private _internal: Array<T> = [];
 
       constructor(starter: Array<T>);
-      constructor(...starter: Array<T>);
       constructor(starter: T);
+      constructor(...starter: Array<T>);
       constructor(starter: any) {
-        if (starter instanceof Array)
-          starter.forEach((item) => this._internal.push(item));
+        if (starter instanceof Array) this._internal = starter;
         else this._internal.push(starter);
       }
 
@@ -50,7 +50,7 @@ export class GenericExamples extends ExamplesBase {
 
     this.separator();
 
-    const cont2 = new Container([...Array(5).keys()]);
+    const cont2 = new Container(...Array(5).keys());
     this.log(`get(2): ${cont2.get(2)}`);
     cont2.print();
   }
@@ -62,7 +62,7 @@ export class GenericExamples extends ExamplesBase {
       some(): void;
     }
 
-    class Constrained<T extends String & ISomething> {
+    class Constrained<T extends string | ISomething> {
       public print(stuff: T) {
         context.log(stuff as unknown as string); // This is a workaround.
       }
@@ -77,13 +77,13 @@ export class GenericExamples extends ExamplesBase {
     constrained.print(myString);
     // constrained.print("Normal string.") // Compiler will complain.
 
-    const functionConstrained = <T extends Function>(func: T) => {};
-    const functionConstrainedLiteral = <T extends () => void>(func: T) => {};
+    // const functionConstrained = <T extends Function>(func: T) => {};
+    // const functionConstrainedLiteral = <T extends () => void>(func: T) => {};
 
-    const literalConstrained = <T extends "first" | "second">(literal: T) => {};
+    // const literalConstrained = <T extends "first" | "second">(literal: T) => {};
 
-    const defaultConstrained = <T = string>(message: T) => {};
+    // const defaultConstrained = <T = string>(message: T) => {};
 
-    const multipleVarConstrained = <T, V>(first: T, second: V) => {};
+    // const multipleVarConstrained = <T, V>(first: T, second: V) => {};
   }
 }
