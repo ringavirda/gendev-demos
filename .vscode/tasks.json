@@ -5,10 +5,8 @@
       "label": "Build: @demos/node",
       "type": "shell",
       "group": "build",
-      "options": {
-        "cwd": "${workspaceFolder}/packages/node"
-      },
-      "command": "yarn build",
+      "command": "yarn workspace @demos/node build",
+      "options": { "cwd": "${workspaceFolder}/packages/node" },
       "problemMatcher": "$tsc",
       "presentation": {
         "echo": true,

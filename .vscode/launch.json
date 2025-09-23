@@ -2,10 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug @demo/node",
-      "program": "${workspaceFolder}/packages/node/dist/app.js",
+      "name": "Debug @demos/node/js",
       "request": "launch",
-      "skipFiles": ["<node_internals>/**"],
+      "runtimeArgs": ["workspace", "@demos/node", "start-js"],
+      "runtimeExecutable": "yarn",
+      "type": "node",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Debug @demos/node/ts",
+      "request": "launch",
+      "runtimeArgs": ["workspace", "@demos/node", "start-ts"],
+      "runtimeExecutable": "yarn",
       "type": "node",
       "console": "integratedTerminal",
       "preLaunchTask": "Build: @demos/node"
