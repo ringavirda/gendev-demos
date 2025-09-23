@@ -1,5 +1,5 @@
 {
-  "name": "@demo/node",
+  "name": "@demos/node",
   "packageManager": "yarn@4.5.1",
   "type": "module",
   "scripts": {
@@ -11,11 +11,12 @@
     "serve-ts": "node --watch ./dist/app.js"
   },
   "dependencies": {
-    "chalk": "^5.3.0",
-    "tsyringe": "^4.8.0"
+    "chalk": "^5.6.2",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.10.0"
   },
   "devDependencies": {
-    "@types/node": "^22.8.6",
-    "typescript": "^5.6.3"
+    "@types/node": "^24.5.2",
+    "typescript": "^5.9.2"
   }
 }
