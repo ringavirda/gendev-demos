@@ -1,4 +1,0 @@
-[submodule "packages/@wp"]
-path = packages/@wp
-url = https://github.com/ringavirda/waifu-picker
-branch = waifu-picker
