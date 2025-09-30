@@ -2,11 +2,38 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build: @demos/node",
+      "label": "Build @demos/yarn",
       "type": "shell",
       "group": "build",
-      "command": "yarn workspace @demos/node build",
-      "options": { "cwd": "${workspaceFolder}/packages/node" },
+      "command": "yarn workspace @demos/yarn build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "Build @demos/examples",
+      "type": "shell",
+      "group": "build",
+      "command": "yarn workspace @demos/examples build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "Build @cli/demo",
+      "type": "shell",
+      "group": "build",
+      "command": "yarn workspace @cli/demo build",
       "problemMatcher": "$tsc",
       "presentation": {
         "echo": true,
@@ -18,31 +45,10 @@
       }
     },
     {
-      "label": "Build: @demos/types",
+      "label": "Build @cli/princess",
       "type": "shell",
       "group": "build",
-      "options": {
-        "cwd": "${workspaceFolder}/packages/types"
-      },
-      "command": "yarn build",
-      "problemMatcher": "$tsc",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      }
-    },
-    {
-      "label": "Build: @wp",
-      "type": "shell",
-      "group": "build",
-      "options": {
-        "cwd": "${workspaceFolder}/packages/@wp"
-      },
-      "command": "yarn build",
+      "command": "yarn workspace @cli/princess build",
       "problemMatcher": "$tsc",
       "presentation": {
         "echo": true,

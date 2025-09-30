@@ -2,46 +2,50 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug @demos/node/js",
+      "name": "Debug @demos/yarn",
       "request": "launch",
-      "runtimeArgs": ["workspace", "@demos/node", "start-js"],
-      "runtimeExecutable": "yarn",
-      "type": "node",
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Debug @demos/node/ts",
-      "request": "launch",
-      "runtimeArgs": ["workspace", "@demos/node", "start-ts"],
+      "runtimeArgs": ["workspace", "@demos/yarn", "start"],
       "runtimeExecutable": "yarn",
       "type": "node",
       "console": "integratedTerminal",
-      "preLaunchTask": "Build: @demos/node"
+      "preLaunchTask": "Build @demos/yarn"
     },
     {
-      "name": "Debug @demo/types",
-      "program": "${workspaceFolder}/packages/types/dist/app.js",
+      "name": "Debug @demos/examples",
+      "request": "launch",
+      "runtimeArgs": ["workspace", "@demos/examples", "start"],
+      "runtimeExecutable": "yarn",
+      "type": "node",
+      "console": "integratedTerminal",
+      "preLaunchTask": "Build @demos/node"
+    },
+    {
+      "name": "Debug @cli/demo",
+      "program": "${workspaceFolder}/apps/@cli/demo/dist/main.js",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
       "type": "node",
       "console": "integratedTerminal",
-      "preLaunchTask": "Build: @demos/types"
+      "preLaunchTask": "Build @cli/demo",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./~/*": "${workspaceFolder}/node_modules/*",
+        "webpack://?:*/*": "${workspaceFolder}/*"
+      }
     },
     {
-      "name": "Debug @wp - front",
-      "request": "launch",
-      "type": "msedge",
-      "url": "http://localhost:5000",
-      "webRoot": "${workspaceFolder}/packages/@wp/dist/public"
-    },
-    {
-      "name": "Debug @wp - server",
-      "program": "${workspaceFolder}/packages/@wp/dist/server.js",
+      "name": "Debug @cli/princess",
+      "program": "${workspaceFolder}/apps/@cli/princess/dist/main.js",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
       "type": "node",
       "console": "integratedTerminal",
-      "preLaunchTask": "Build: @wp"
+      "preLaunchTask": "Build @cli/princess",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./~/*": "${workspaceFolder}/node_modules/*",
+        "webpack://?:*/*": "${workspaceFolder}/*"
+      }
     }
   ]
 }
