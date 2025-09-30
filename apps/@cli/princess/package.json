@@ -1,0 +1,24 @@
+{
+  "name": "@cli/princess",
+  "scripts": {
+    "build": "webpack -c configs/webpack.config.js",
+    "build-prod": "webpack -c configs/webpack.config.prod.js",
+    "watch": "webpack -c configs/webpack.config.js --watch",
+    "start": "node dist/main.js",
+    "serve": "node --watch dist/main.js"
+  },
+  "dependencies": {
+    "@cli/lib": "workspace:^",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "@types/webpack-node-externals": "^3",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.2",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
