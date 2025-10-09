@@ -1,6 +1,6 @@
 {
   "name": "@demos/examples",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "scripts": {
     "build": "webpack -c configs/webpack.config.js",
     "watch": "webpack -c .configs/webpack.config.js --watch",

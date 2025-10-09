@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ExamplesBase, registerExamples } from "@demos/prefabs";
 
 @registerExamples()
@@ -41,9 +42,9 @@ export class TypingExamples extends ExamplesBase {
       powerRank: number;
     };
 
-    // const addPrincess = (req: Princess) => {
-    //   this.log(`Added: ${JSON.stringify(req)}`);
-    // };
+    const addPrincess = (req: Princess) => {
+      this.log(`Added: ${JSON.stringify(req)}`);
+    };
 
     // Compiler will complain if we don't initialize all fields.
     // addPrincess({
@@ -73,10 +74,10 @@ export class TypingExamples extends ExamplesBase {
       night: "Luna",
     };
 
-    // const aspects = {
-    //   first: "day",
-    //   second: "night",
-    // };
+    const aspects = {
+      first: "day",
+      second: "night",
+    };
 
     const getPrincess = (aspect: "day" | "night") => {
       return princesses[aspect];
@@ -117,5 +118,22 @@ export class TypingExamples extends ExamplesBase {
 
     this.log(getPrincessConst("love"));
     this.log(getPrincessConst("friendship"));
+  }
+
+  exampleMeta() {
+    type Princesses = {
+      day: "Celestia";
+      night: "Luna";
+      love: "Cadance";
+      friendship: "Twilight";
+    };
+
+    type GetPrincessMeta<T extends keyof Princesses> = Princesses[T];
+
+    const friendship: GetPrincessMeta<"friendship"> = "Twilight";
+    const night: GetPrincessMeta<"night"> = "Luna";
+
+    this.log(friendship);
+    this.log(night);
   }
 }
