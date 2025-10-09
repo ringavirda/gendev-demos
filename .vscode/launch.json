@@ -17,7 +17,12 @@
       "runtimeExecutable": "yarn",
       "type": "node",
       "console": "integratedTerminal",
-      "preLaunchTask": "Build @demos/examples"
+      "preLaunchTask": "Build @demos/examples",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./~/*": "${workspaceFolder}/node_modules/*",
+        "webpack://?:*/*": "${workspaceFolder}/*"
+      }
     },
     {
       "name": "Debug @cli/demo",

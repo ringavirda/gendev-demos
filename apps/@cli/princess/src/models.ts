@@ -22,13 +22,12 @@ export class PrincessesEntity {
   ) {}
 
   public async loadAsync(): Promise<void> {
-    this._loader.loadAsync().then(() => {
-      if (this._loader.getStateKey("princesses") === undefined) {
-        this._loader.setStateKey("princesses", this._utils.KnownPrincesses);
-        this._loader.saveAsync();
-      }
-      this._state = this._loader.getStateKey<PrincessMap>("princesses");
-    });
+    await this._loader.loadAsync();
+    if (this._loader.getStateKey("princesses") === undefined) {
+      this._loader.setStateKey("princesses", this._utils.KnownPrincesses);
+      this._loader.saveAsync();
+    }
+    this._state = this._loader.getStateKey<PrincessMap>("princesses");
   }
 
   // Category operations

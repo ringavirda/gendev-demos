@@ -1,11 +1,6 @@
 {
   "extends": "../../../../tsconfig.base.json",
   "compilerOptions": {
-    "sourceMap": true,
-
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-
     "outDir": "../dist"
   },
   "include": ["../src/**/*.ts"]

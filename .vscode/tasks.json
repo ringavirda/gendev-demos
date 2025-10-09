@@ -1,63 +1,50 @@
 {
   "version": "2.0.0",
+  "type": "shell",
+  "group": "build",
+  "problemMatcher": "$tsc",
+  "presentation": {
+    "echo": true,
+    "reveal": "silent",
+    "focus": false,
+    "panel": "shared",
+    "showReuseMessage": true,
+    "clear": false
+  },
   "tasks": [
+    // Apps
     {
       "label": "Build @demos/yarn",
-      "type": "shell",
-      "group": "build",
-      "command": "yarn workspace @demos/yarn build",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      }
+      "command": "yarn workspace @demos/yarn build"
     },
     {
       "label": "Build @demos/examples",
-      "type": "shell",
-      "group": "build",
       "command": "yarn workspace @demos/examples build",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      }
+      "dependsOn": ["Build @demos/prefabs"]
     },
     {
       "label": "Build @cli/demo",
-      "type": "shell",
-      "group": "build",
       "command": "yarn workspace @cli/demo build",
-      "problemMatcher": "$tsc",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      }
+      "dependsOn": ["Build @cli/lib"]
     },
     {
       "label": "Build @cli/princess",
-      "type": "shell",
-      "group": "build",
       "command": "yarn workspace @cli/princess build",
-      "problemMatcher": "$tsc",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      }
+      "dependsOn": ["Build @cli/lib"]
+    },
+    // Packages
+    {
+      "label": "Build @demos/prefabs",
+      "command": "yarn workspace @demos/prefabs build"
+    },
+    {
+      "label": "Build @demos/oop",
+      "command": "yarn workspace @demos/oop build",
+      "dependsOn": ["Build @demos/oop"]
+    },
+    {
+      "label": "Build @cli/lib",
+      "command": "yarn workspace @cli/lib build"
     }
   ]
 }
