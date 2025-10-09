@@ -17,27 +17,22 @@
       "runtimeExecutable": "yarn",
       "type": "node",
       "console": "integratedTerminal",
-      "preLaunchTask": "Build @demos/node"
+      "preLaunchTask": "Build @demos/examples"
     },
     {
       "name": "Debug @cli/demo",
-      "program": "${workspaceFolder}/apps/@cli/demo/dist/main.js",
       "request": "launch",
-      "skipFiles": ["<node_internals>/**"],
+      "runtimeArgs": ["workspace", "@cli/demo", "start"],
+      "runtimeExecutable": "yarn",
       "type": "node",
       "console": "integratedTerminal",
-      "preLaunchTask": "Build @cli/demo",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///./~/*": "${workspaceFolder}/node_modules/*",
-        "webpack://?:*/*": "${workspaceFolder}/*"
-      }
+      "preLaunchTask": "Build @cli/demo"
     },
     {
       "name": "Debug @cli/princess",
-      "program": "${workspaceFolder}/apps/@cli/princess/dist/main.js",
       "request": "launch",
-      "skipFiles": ["<node_internals>/**"],
+      "runtimeArgs": ["workspace", "@cli/princess", "start"],
+      "runtimeExecutable": "yarn",
       "type": "node",
       "console": "integratedTerminal",
       "preLaunchTask": "Build @cli/princess",

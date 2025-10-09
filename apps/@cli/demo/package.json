@@ -1,5 +1,6 @@
 {
   "name": "@cli/demo",
+  "main": "dist/main.js",
   "scripts": {
     "build": "webpack -c configs/webpack.config.js",
     "build-prod": "webpack -c configs/webpack.config.prod.js",
