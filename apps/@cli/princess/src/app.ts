@@ -38,7 +38,7 @@ class App {
     await this._entity.loadAsync();
   }
 
-  public async run() {
+  public async runAsync() {
     this.echoLines(this._helloLines);
     while (true) {
       const command = await this._cli.readCommandAsync(this._promptSymbol);
@@ -60,4 +60,4 @@ class App {
 const app = container.resolve(App);
 
 await app.startupAsync();
-await app.run();
+await app.runAsync();

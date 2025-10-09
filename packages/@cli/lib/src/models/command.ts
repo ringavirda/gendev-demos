@@ -1,6 +1,6 @@
 import { CArgs } from "./cArgs.js";
 
-export interface Command {
+export type Command = {
   selectors: Array<string>;
   actionAsync: (args: CArgs) => Promise<void>;
-}
+};
