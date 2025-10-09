@@ -12,6 +12,15 @@
     "clear": false
   },
   "tasks": [
+    // All
+    {
+      "label": "Build All",
+      "command": "yarn build-all",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
     // Apps
     {
       "label": "Build @demos/yarn",

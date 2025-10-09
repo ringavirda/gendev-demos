@@ -1,8 +1,7 @@
 import { singleton } from "tsyringe";
 
-import { Command } from "../models/command.js";
+import { Command, CommandArgs } from "./models/command.js";
 import { CLI } from "./cli.js";
-import { CArgs } from "../models/cArgs.js";
 
 @singleton()
 export class Executor {
@@ -12,32 +11,81 @@ export class Executor {
     this.registerCommand(
       {
         selectors: ["help", "h"],
+        description: "Returns information about other commands.",
+        help: [
+          "Displays all known commands if no selector is provided or displays help message for a given command selector.",
+          "Syntax",
+          "  help <command_selector?>",
+          "Example usage:",
+          "  help",
+          "  h help",
+          "  h exit",
+        ],
+        actionAsync: async (args: CommandArgs) => {
+          if (args.list.length === 0) {
+            this._cli.echoSuccess("Supported command signatures:");
+            this._commands
+              .map((c) => [c.selectors.join(", "), c.description])
+              .forEach((s) => {
+                this._cli.echoInline(` - ${s[0]}`);
+                this._cli.echo(s[1] ? ` - ${s[1]}` : "");
+              });
+          } else if (args.list.length === 1) {
+            const command = this._commands.find((c) =>
+              c.selectors.includes(args.list[0]),
+            );
+            if (command) {
+              this._cli.echoSuccess(
+                `${command.selectors[0].toUpperCase()} command:`,
+              );
+              this._cli.echo(
+                command.help
+                  ? command.help.join("\n")
+                  : "No help message was found!",
+              );
+            } else throw new Error(`Unknown command: ${args.list[0]}`);
+          }
+        },
+      },
+      true,
+    );
+    this.registerCommand(
+      {
+        selectors: ["exit", "quit", "q"],
+        description: "Exits the application.",
         actionAsync: async () => {
-          this._cli.echoSuccess("Supported command signatures:");
-          this._commands
-            .map((c) => c.selectors.join(", "))
-            .forEach((s) => this._cli.echo(` - ${s}`));
+          this._cli.close();
+          process.exit(0);
         },
       },
       true,
     );
   }
 
-  public async executeAsync(cArgs: CArgs): Promise<void> {
-    const command = this._commands.find((c) =>
-      c.selectors.includes(cArgs.selector),
-    );
-    if (command === undefined)
-      throw new Error(`Unknown command: ${cArgs.selector}`);
-
-    await command.actionAsync(cArgs);
+  public async executeAsync(args: CommandArgs): Promise<void> {
+    try {
+      const command = this._commands.find((c) =>
+        c.selectors.includes(args.selector),
+      );
+      if (command === undefined)
+        this._cli.echoError(`Unknown command: ${args.selector}`);
+      else await command.actionAsync(args);
+    } catch (err) {
+      this._cli.echoError((err as Error).message);
+    }
   }
 
   public registerCommand(command: Command, override: boolean = false): void {
     const existing = this._commands.find((c) =>
       c.selectors.some((s) => command.selectors.includes(s)),
     );
-    if (existing !== undefined && !override) {
+    if (existing !== undefined) {
+      if (override) {
+        const position = this._commands.indexOf(existing);
+        this._commands.splice(position, 1);
+        this._commands.splice(position, 0, command);
+        return;
+      }
       throw new Error(
         `Command with selectors (${existing.selectors.join(
           ", ",
@@ -54,12 +102,5 @@ export class Executor {
     if (index === -1)
       throw new Error(`Cannot find command with selector: ${selector}`);
     this._commands.splice(index, 1);
-  }
-
-  public argsHaveLength(cArgs: CArgs, length: number): void {
-    if (cArgs.args.length < length)
-      throw new Error(
-        `Command (${cArgs.selector}) requires at least ${length} argument(s).`,
-      );
   }
 }

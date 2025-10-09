@@ -3,7 +3,7 @@
   "packageManager": "yarn@4.10.3",
   "type": "module",
   "scripts": {
-    "build-all": "yarn workspaces foreach -v run build",
+    "build-all": "yarn workspaces foreach --all -pt run build",
     "clean-all": "rimraf apps/*/dist --glob && rimraf packages/*/dist --glob"
   },
   "workspaces": [
@@ -20,6 +20,7 @@
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.1"
+    "typescript-eslint": "^8.44.1",
+    "webpack-merge": "^6.0.1"
   }
 }

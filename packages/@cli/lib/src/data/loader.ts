@@ -3,11 +3,11 @@ import { join } from "path";
 import { singleton } from "tsyringe";
 
 import { CLI } from "../cli/cli.js";
-import { MapFixes } from "./mapFixes.js";
+import { MapFixes } from "./fixes.js";
 
 @singleton()
 export class JsonLoader {
-  private _dirPath = join(import.meta.dirname, "..", "data");
+  private _dirPath = join(import.meta.dirname, "data");
   private _fileName = "db.json";
   private _path = join(this._dirPath, this._fileName);
 

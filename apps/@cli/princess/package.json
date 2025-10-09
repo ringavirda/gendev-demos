@@ -1,10 +1,11 @@
 {
   "name": "@cli/princess",
   "main": "dist/main.js",
+  "type": "module",
   "scripts": {
-    "build": "webpack -c configs/webpack.config.js",
-    "build-prod": "webpack -c configs/webpack.config.prod.js",
-    "watch": "webpack -c configs/webpack.config.js --watch",
+    "build": "webpack -c configs/webpack.dev.js",
+    "build-prod": "webpack -c configs/webpack.prod.js",
+    "watch": "webpack -c configs/webpack.dev.js --watch",
     "start": "node dist/main.js",
     "serve": "node --watch dist/main.js"
   },

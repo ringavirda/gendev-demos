@@ -1,69 +1,27 @@
 import { singleton } from "tsyringe";
 
 import { CLI } from "@cli/lib";
-import { Princess, PrincessMap } from "./models";
+import { Princess } from "./models/princess";
 
 @singleton()
 export class PrincessUtils {
   constructor(private readonly _cli: CLI) {}
 
-  public readonly KnownPrincesses: PrincessMap = new Map([
-    [
-      "elder",
-      [
-        {
-          commonName: "Celestia",
-          oldName: "Celestia",
-          titles: ["Princess of the Day", "Daybreaker"],
-        },
-        {
-          commonName: "Luna",
-          oldName: "Luna",
-          titles: ["Princess of the Night", "Nightmare Moon"],
-        },
-        {
-          commonName: "Cadance",
-          oldName: "Mi Amore Cadenza",
-          titles: ["Princess of Love", "Crystal Empress"],
-        },
-      ],
-    ],
-    [
-      "young",
-      [
-        {
-          commonName: "Sparkle",
-          oldName: "Twilight Sparkle",
-          titles: ["Princess of Friendship", "Element of Magic"],
-        },
-        {
-          commonName: "Sunset",
-          oldName: "Shimmer Sunset",
-          titles: ["Demoness of Fire", "Element of Empathy"],
-        },
-        {
-          commonName: "Fallenstar",
-          oldName: "Starfall Fading",
-          titles: ["Princess of Destruction", "Godhunter"],
-        },
-      ],
-    ],
-  ]);
-
   public echoPrincess(pr: Princess) {
     this._cli.echo(
       pr.commonName !== pr.oldName
-        ? `${pr.commonName} (${pr.oldName}):`
-        : `${pr.commonName}:`,
+        ? `${pr.commonName} (${pr.oldName})`
+        : `${pr.commonName}`,
+      { color: "magenta" },
     );
     this._cli.echo(`\t${pr.titles.join(", ")}`);
   }
 
-  public async princessDialogueAsync(commonName: string): Promise<Princess> {
-    if (commonName === "") {
+  public async princessDialogueAsync(name: string): Promise<Princess> {
+    if (name === "") {
       this._cli.echoWarn("Please provide necessary information:");
-      commonName = await this._cli.readAsync("Common Name:");
-      if (commonName == "")
+      name = await this._cli.readAsync("Common Name:");
+      if (name == "")
         throw new Error("Cannot create new princess without a name.");
     } else this._cli.echoWarn("Please provide additional information:");
 
@@ -78,9 +36,20 @@ export class PrincessUtils {
       .filter((s) => s != "");
 
     return {
-      commonName: commonName,
+      commonName: name,
       oldName: oldName,
       titles: titles,
     };
+  }
+
+  public async princessConfirmAsync(
+    operation: string,
+    name: string,
+  ): Promise<void> {
+    this._cli.echoWarn(
+      `You are about to ${operation} the princess ${name}, do you confirm?`,
+    );
+    const resp = await this._cli.readAsync("(yes/any) >");
+    if (resp.toLowerCase() !== "yes") throw new Error("Operation aborted.");
   }
 }

@@ -2,8 +2,8 @@ import "reflect-metadata";
 import { container, singleton } from "tsyringe";
 
 import { CLI, Executor } from "@cli/lib";
-import { PrincessCommands } from "./commands";
-import { PrincessesEntity } from "./models";
+import { PrincessCommands } from "./services/commands";
+import { PrincessesRepository } from "./services/repository";
 
 @singleton()
 class App {
@@ -11,17 +11,20 @@ class App {
     private readonly _cli: CLI,
     private readonly _exec: Executor,
     private readonly _commands: PrincessCommands,
-    private readonly _entity: PrincessesEntity,
+    private readonly _entity: PrincessesRepository,
   ) {
-    this._exec.registerCommand({
-      selectors: ["exit", "quit", "q"],
-      actionAsync: async () => {
-        this.echoLines(this._goodbyLines);
-        this._cli.close();
-        process.exit(0);
+    this._exec.registerCommand(
+      {
+        selectors: ["exit", "quit", "q"],
+        description: "Exits the application.",
+        actionAsync: async () => {
+          this.echoLines(this._goodbyLines);
+          this._cli.close();
+          process.exit(0);
+        },
       },
-    });
-
+      true,
+    );
     this._commands.commandList.forEach((c) => this._exec.registerCommand(c));
   }
 
@@ -42,11 +45,7 @@ class App {
     this.echoLines(this._helloLines);
     while (true) {
       const command = await this._cli.readCommandAsync(this._promptSymbol);
-      try {
-        await this._exec.executeAsync(command);
-      } catch (err) {
-        this._cli.echoError((err as Error).message);
-      }
+      await this._exec.executeAsync(command);
     }
   }
 

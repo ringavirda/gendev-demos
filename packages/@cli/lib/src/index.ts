@@ -1,5 +1,6 @@
+import "reflect-metadata";
 export { CLI } from "./cli/cli.js";
 export { Executor } from "./cli/executor.js";
-export { JsonLoader } from "./repo/loader.js";
-export { Command } from "./models/command.js";
-export { CArgs } from "./models/cArgs.js";
+export { JsonLoader } from "./data/loader.js";
+export { Command, CommandArgs } from "./cli/models/command.js";
+export { EchoColors, EchoOptions } from "./cli/models/echo.js";

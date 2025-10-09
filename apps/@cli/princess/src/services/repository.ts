@@ -1,18 +1,11 @@
 import { singleton } from "tsyringe";
 
 import { CLI, JsonLoader } from "@cli/lib";
-import { PrincessUtils } from "./utils";
-
-export interface Princess {
-  commonName: string; // Pony notation.
-  oldName: string; // Unicorn notation.
-  titles: Array<string>; // Aliases.
-}
-
-export type PrincessMap = Map<string, Array<Princess>>;
+import { PrincessUtils } from "../utils";
+import { KnownPrincesses, Princess, PrincessMap } from "../models/princess";
 
 @singleton()
-export class PrincessesEntity {
+export class PrincessesRepository {
   private _state: PrincessMap = null!;
 
   constructor(
@@ -24,7 +17,7 @@ export class PrincessesEntity {
   public async loadAsync(): Promise<void> {
     await this._loader.loadAsync();
     if (this._loader.getStateKey("princesses") === undefined) {
-      this._loader.setStateKey("princesses", this._utils.KnownPrincesses);
+      this._loader.setStateKey("princesses", KnownPrincesses);
       this._loader.saveAsync();
     }
     this._state = this._loader.getStateKey<PrincessMap>("princesses");
