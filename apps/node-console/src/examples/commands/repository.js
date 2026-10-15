@@ -34,24 +34,26 @@ class PrincessRepo {
   #repoFile = "princesses.json";
   #repoPath = join(this.#repoDir, this.#repoFile);
 
-  // Declare an internal state that initializes in constructor.
-  #state;
+  #loaded;
 
-  constructor() {
+  // The state is loaded on first use: cli.js and this module import each
+  // other, so cli is not initialized yet while this module evaluates.
+  get #state() {
+    if (this.#loaded) return this.#loaded;
     try {
-      // Cannot use async calls in constructors.
       // Read file if exists
       accessSync(this.repoPath, constants.F_OK);
       const data = readFileSync(this.repoPath);
-      this.#state = JSON.parse(data.toString(), reviver);
+      this.#loaded = JSON.parse(data.toString(), reviver);
     } catch {
       // Initialize database file if not
       cli.echoWarn(
         "Princess repo is uninitialized. Populating with default values...",
       );
       writeFileSync(this.repoPath, JSON.stringify(PrincessDict, replacer));
-      this.#state = PrincessDict;
+      this.#loaded = PrincessDict;
     }
+    return this.#loaded;
   }
 
   get state() {
