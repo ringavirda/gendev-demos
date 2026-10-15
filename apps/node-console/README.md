@@ -2,7 +2,7 @@
 
 Small console programs that show how Node.js does input and output. Pick one by name:
 
-    pnpm start <example>
+    pnpm --filter @gendev/node-console start <example>
 
 Without a name the list of examples is printed.
 

@@ -36,17 +36,9 @@ with its own commands.
 
 ### Projects, package managers, monorepo and TypeScript setup
 
-Root workspace, `packages/ts-examples` (typing examples) and the templates.
+Root workspace and `packages/ts-examples` (typing examples).
 
     pnpm --filter @gendev/ts-tour start typing
-
-The templates are copied with tiged:
-
-    pnpm dlx tiged ringavirda/gendev-demos/templates/node-ts my-app
-    pnpm dlx tiged ringavirda/gendev-demos/templates/monorepo my-repo
-
-`node-ts` is one Node.js console app in TypeScript. `monorepo` is a pnpm
-workspace with a library and a console app.
 
 ### TypeScript 7
 
@@ -96,10 +88,20 @@ linked list. `packages/example-runner` registers and runs the example classes.
     pnpm --filter @gendev/ts-tour start decorators
     pnpm --filter @gendev/ts-tour start linked-list
 
+## Templates
+
+The starter projects in `templates/` are copied with tiged:
+
+    pnpm dlx tiged ringavirda/gendev-demos/templates/node-ts my-app
+    pnpm dlx tiged ringavirda/gendev-demos/templates/monorepo my-repo
+
+`node-ts` is one Node.js console app in TypeScript. `monorepo` is a pnpm
+workspace with a library and a console app.
+
 ## Root scripts
 
-- `pnpm build` builds every workspace with tsc.
-- `pnpm typecheck` checks the types of every workspace.
+- `pnpm build` builds every TypeScript workspace with tsc.
+- `pnpm typecheck` checks the types of every TypeScript workspace.
 - `pnpm lint` runs ESLint over the repository.
 - `pnpm test` runs the vitest tests of every workspace.
 - `pnpm format` formats the repository with Prettier.
