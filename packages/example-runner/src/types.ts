@@ -2,7 +2,7 @@ export type Examples = Map<string, (() => void) | null>;
 
 export abstract class ExamplesBase {
   protected log(message: string | unknown): void {
-    if (message instanceof String) {
+    if (typeof message === "string") {
       message.split("\n").forEach((line) => {
         console.log(` | ${line}`);
       });
