@@ -1,17 +1,10 @@
 {
   "name": "demos-gendev",
-  "packageManager": "yarn@4.10.3",
+  "packageManager": "pnpm@12.11.2",
   "type": "module",
   "scripts": {
-    "build-all": "yarn workspaces foreach --all -pt run build",
-    "clean-all": "rimraf apps/*/dist --glob && rimraf packages/*/dist --glob"
+    "build": "pnpm -r build"
   },
-  "workspaces": [
-    "apps/*",
-    "apps/@*/*",
-    "packages/*",
-    "packages/@*/*"
-  ],
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@types/node": "^24.5.2",
