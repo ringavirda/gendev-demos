@@ -98,6 +98,9 @@ The starter projects in `templates/` are copied with tiged:
 `node-ts` is one Node.js console app in TypeScript. `monorepo` is a pnpm
 workspace with a library and a console app.
 
+[templates/README.md](templates/README.md) says what you need installed, how
+to get a copy and what to try in each one.
+
 ## Root scripts
 
 - `pnpm build` builds every TypeScript workspace with tsc.
