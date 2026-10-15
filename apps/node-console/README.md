@@ -21,9 +21,9 @@ Without a name the list of examples is printed.
 ## Events and async
 
 Most Node.js packages offer both interfaces: callbacks and events on one side, promises and
-async iteration on the other. Each pair above does the same job and prints the same text, so
-the two styles can be read side by side. Pairs share a file: stdin-events and
-readline-question are the first pair, then the readline, emitter and fs pairs.
+async iteration on the other. Each pair above does the same job, so the two styles can be
+read side by side. The readline, emitter and fs pairs each share a file; the first pair,
+stdin-events and readline-question, is two files.
 
 Prefer the async half. It reads top to bottom, errors travel through `try` and `catch` or a
 rejection instead of an `error` event nobody may be listening to, and loops are loops. Events

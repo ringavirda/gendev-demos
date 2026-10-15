@@ -21,7 +21,7 @@ const withEvents = (category, delayMs) =>
     const summoning = new Summoning();
     const heard = [];
     summoning.on("princess", (name) => heard.push(name));
-    summoning.on("done", () => resolve(heard));
+    summoning.on("done", (names) => resolve({ heard: [...heard], names }));
     summoning.on("error", reject);
     summoning.start(category, delayMs);
   });
@@ -62,7 +62,9 @@ describe("fs pair", () => {
 describe("emitter pair", () => {
   it("gives the same names in order for elder", async () => {
     const names = ["Celestia", "Luna", "Cadance"];
-    expect(await withEvents("elder", 0)).toEqual(names);
+    const events = await withEvents("elder", 0);
+    expect(events.heard).toEqual(names);
+    expect(events.names).toEqual(names);
     expect(await summon("elder", 0)).toEqual(names);
   });
 

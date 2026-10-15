@@ -89,7 +89,13 @@ const usage = () => {
   return `Usage: pnpm start <example>\n\nExamples:\n${lines.join("\n")}`;
 };
 
-const { positionals } = parseArgs({ allowPositionals: true });
+let positionals;
+try {
+  ({ positionals } = parseArgs({ allowPositionals: true }));
+} catch (error) {
+  console.error(`${error.message}\n\n${usage()}`);
+  process.exit(1);
+}
 const [name] = positionals;
 
 if (name === undefined) {

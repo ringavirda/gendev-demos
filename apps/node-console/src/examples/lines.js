@@ -30,10 +30,13 @@ export const runLineEvents = () => {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
   rl.setPrompt(prompt);
 
-  rl.on("line", (line) => {
-    if (interpret(line)) rl.close();
-    else rl.prompt();
-  });
+  const onLine = (line) => {
+    if (interpret(line)) {
+      rl.off("line", onLine);
+      rl.close();
+    } else rl.prompt();
+  };
+  rl.on("line", onLine);
   rl.on("close", () => echo("Bye!"));
 
   rl.prompt();
