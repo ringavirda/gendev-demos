@@ -25,7 +25,13 @@ function usage(): string {
     .join("\n")}`;
 }
 
-const { positionals } = parseArgs({ allowPositionals: true });
+let positionals: string[] = [];
+try {
+  ({ positionals } = parseArgs({ allowPositionals: true }));
+} catch (err) {
+  console.error(`${(err as Error).message}\n${usage()}`);
+  process.exit(1);
+}
 
 if (positionals.length === 0) {
   console.log(usage());

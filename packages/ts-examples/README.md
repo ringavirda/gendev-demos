@@ -12,6 +12,7 @@ TypeScript examples, one class per topic. Every method whose name starts with
   decorators.
 - `linkedList.ts` (`LinkedListExamples`): a generic linked list and its nodes.
 
-The package turns on `experimentalDecorators` and `emitDecoratorMetadata`
-because the examples use the legacy decorators, parameter decorators included,
-and reflect metadata. The standard decorators have no parameter decorators.
+The package turns on `experimentalDecorators` because the examples use the
+legacy decorators: the legacy method signature and parameter decorators, which
+the standard decorators lack. The `reflect-metadata` calls work without
+`emitDecoratorMetadata`.
