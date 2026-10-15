@@ -18,8 +18,8 @@ From the repo root:
     pnpm --filter @gendev/ts7 legacy:6    tsconfig.legacy.json under tsc6: accepted
     pnpm --filter @gendev/ts7 legacy:7    tsconfig.legacy.json under tsc 7: rejected
 
-`pnpm -r build` runs only `build`, so the repo build uses TypeScript 7 here. `dist/` and `dist6/`
-print the same output from `start`.
+`pnpm -r build` runs only `build`, so the repo build uses TypeScript 7 here. `node dist/app.js` and
+`node dist6/app.js` print the same output.
 
 `compare` runs `scripts/compare.js`. It takes `--runs N` (default 5) and an optional project
 path (default `../../packages/ts-examples`), does one warm-up check, then times N `--noEmit`
@@ -33,11 +33,11 @@ API that exists is under `typescript/unstable/*`; it is not the API typescript-e
 7.1 is expected to bring a new, different API. Until then tools that need the compiler API run on
 6.0 through `@typescript/typescript6`, which provides `tsc6` and re-exports the 6.0 API, so `tsc`
 7 and 6.0 can sit side by side (this workspace does that).
-typescript-eslint 8.71 peers `typescript` `<6.1.0`, so 7 cannot be linted yet. That is why the
+typescript-eslint 8.71.2 peers `typescript` `<6.1.0`, so 7 cannot be linted yet. That is why the
 repo stays on 6 and this workspace is outside the root lint (`apps/ts7/` is in the ignores of
 `eslint.config.js`).
-Checked against https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/ and the
-`typescript` 7.0.2 package.
+Checked against https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/, the
+`typescript` 7.0.2 package and the typescript-eslint 8.71.2 package.
 
 Defaults that changed in 6.0 and that 7.0 adopts:
 
@@ -63,7 +63,7 @@ Options deprecated in 6.0 (silenced there with `"ignoreDeprecations": "6.0"`) an
 - `target: es5`
 - `downlevelIteration`
 - `moduleResolution` `node` / `node10` and `classic`
-- `module` `amd`, `umd`, `systemjs`, `none`
+- `module` `amd`, `umd`, `system`, `none`
 - `baseUrl`
 - `esModuleInterop` and `allowSyntheticDefaultImports` set to false
 - `alwaysStrict` set to false

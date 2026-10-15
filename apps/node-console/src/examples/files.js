@@ -1,4 +1,4 @@
-// Load every .txt in data/ into a Map from category to names, with callbacks and with promises.
+// Load every .txt in data/ into a Map, with callbacks and with promises.
 import { readdir, readFile } from "node:fs";
 import {
   readdir as readdirAsync,

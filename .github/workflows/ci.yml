@@ -24,6 +24,7 @@ jobs:
   templates:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         template: [node-ts, monorepo]
     steps:

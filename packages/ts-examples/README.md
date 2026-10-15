@@ -7,7 +7,8 @@ TypeScript examples, one class per topic. Every method whose name starts with
   interfaces against the diamond problem, abstract classes.
 - `typing.ts` (`TypingExamples`): interfaces, types, `as const`, `typeof` and
   `keyof`, meta types.
-- `generics.ts` (`GenericExamples`): generic classes with overloaded constructors, constraints.
+- `generics.ts` (`GenericExamples`): generic classes with overloaded
+  constructors, constraints.
 - `decorators.ts` (`DecoratorsExamples`): class, method, field and parameter
   decorators.
 - `linkedList.ts` (`LinkedListExamples`): a generic linked list and its nodes.

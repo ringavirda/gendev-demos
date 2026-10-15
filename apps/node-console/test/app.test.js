@@ -19,7 +19,9 @@ describe("app arguments", () => {
     const error = await run(process.execPath, [app, "--help"]).catch((e) => e);
     expect(error.code).toBe(1);
     expect(error.stderr).toContain("Unknown option '--help'");
-    expect(error.stderr).toContain("Usage: pnpm start <example>");
+    expect(error.stderr).toContain(
+      "Usage: pnpm --filter @gendev/node-console start <example>",
+    );
   });
 });
 

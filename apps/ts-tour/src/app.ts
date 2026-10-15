@@ -20,7 +20,7 @@ const topics = {
 const names = [...Object.keys(topics), "all"];
 
 function usage(): string {
-  return `Usage: pnpm start <topic>...\nTopics:\n${names
+  return `Usage: pnpm --filter @gendev/ts-tour start <topic>...\nTopics:\n${names
     .map((n) => `  ${n}`)
     .join("\n")}`;
 }
@@ -41,8 +41,8 @@ if (positionals.length === 0) {
     console.error(`Unknown topic: ${unknown}\n${usage()}`);
     process.exit(1);
   }
-  const chosen = positionals.includes("all")
-    ? Object.values(topics)
-    : positionals.map((p) => topics[p as keyof typeof topics]);
+  const chosen = positionals.flatMap((p) =>
+    p === "all" ? Object.values(topics) : [topics[p as keyof typeof topics]],
+  );
   runExamples(chosen);
 }

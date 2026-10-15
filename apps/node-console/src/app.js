@@ -1,4 +1,4 @@
-import { parseArgs } from "util";
+import { parseArgs } from "node:util";
 
 // Every example is loaded on demand: some of them open stdin when imported.
 const examples = {
@@ -86,7 +86,7 @@ const usage = () => {
   const lines = Object.entries(examples).map(
     ([name, { description }]) => `  ${name.padEnd(width)}  ${description}`,
   );
-  return `Usage: pnpm start <example>\n\nExamples:\n${lines.join("\n")}`;
+  return `Usage: pnpm --filter @gendev/node-console start <example>\n\nExamples:\n${lines.join("\n")}`;
 };
 
 let positionals;

@@ -1,11 +1,12 @@
-// Summon the princesses of a category one at a time, with an emitter and with a promise.
+// Summon a category of princesses one at a time, by emitter and by promise.
 import { EventEmitter } from "node:events";
 import { setTimeout as sleep } from "node:timers/promises";
 import { PrincessDict } from "../princesses.js";
 
 const unknown = (category) => new Error(`Unknown category: ${category}`);
 
-// Emits "princess" (name) for each one, then "done" (names); "error" for an unknown category.
+// Emits "princess" (name) for each one, then "done" (names); "error" for an
+// unknown category.
 export class Summoning extends EventEmitter {
   start(category, delayMs) {
     const names = PrincessDict.get(category);

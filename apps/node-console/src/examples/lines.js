@@ -1,7 +1,7 @@
-// Read y/e/q lines from stdin and draw a princess for each, as events and with for await.
-import { createInterface } from "readline";
-import { createInterface as createPromiseInterface } from "readline/promises";
-import process from "process";
+// Read y/e/q lines from stdin and draw a princess, by events and for await.
+import { createInterface } from "node:readline";
+import { createInterface as createPromiseInterface } from "node:readline/promises";
+import process from "node:process";
 import { getRandomPrincess } from "../princesses.js";
 
 const echo = (message) => process.stdout.write(`${message}\n`);
@@ -25,7 +25,7 @@ const interpret = (line) => {
   return false;
 };
 
-// Callbacks on the "line" and "close" events; the end of input is the "close" event.
+// Callbacks on the "line" and "close" events; the end of input is "close".
 export const runLineEvents = () => {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
   rl.setPrompt(prompt);
@@ -42,7 +42,7 @@ export const runLineEvents = () => {
   rl.prompt();
 };
 
-// The interface is an async iterable of lines; the loop ends at the end of input.
+// The interface is an async iterable of lines; the loop ends with the input.
 export const runForAwait = async () => {
   const rl = createPromiseInterface({ input: process.stdin });
 
