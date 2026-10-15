@@ -1,0 +1,23 @@
+{
+  "name": "@gendev/princess",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "tsc && concurrently --kill-others --raw \"tsc --watch --preserveWatchOutput\" \"node --watch dist/app.js\"",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@gendev/cli-lib": "workspace:*",
+    "reflect-metadata": "catalog:",
+    "tsyringe": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "concurrently": "catalog:",
+    "rimraf": "catalog:",
+    "typescript": "catalog:"
+  }
+}
