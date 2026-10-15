@@ -46,11 +46,12 @@ Defaults that changed in 6.0 and that 7.0 adopts:
 - `target` is the current stable ECMAScript version before `esnext`.
 - `noUncheckedSideEffectImports` is true.
 - `libReplacement` is false.
-- `stableTypeOrdering` is true and cannot be turned off.
 - `rootDir` is the directory of the tsconfig, so a project with sources in `src` sets
   `"rootDir": "src"` or its output lands in `dist/src`.
 - `types` is `[]`, so `@types/node` must be listed, as in `"types": ["node"]`; `["*"]` restores
   the old behavior.
+
+7.0 also turns on `stableTypeOrdering`, which 6.0 offers as an opt-in flag; 7.0 cannot turn it off.
 
 Checked against https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/ and
 https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/. `tsconfig.json` here

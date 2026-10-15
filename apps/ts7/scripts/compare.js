@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 const { values, positionals } = parseArgs({
+  args: process.argv.slice(2).filter((arg) => arg !== "--"),
   options: { runs: { type: "string", default: "5" } },
   allowPositionals: true,
 });
@@ -24,10 +25,11 @@ const require = createRequire(import.meta.url);
 function locate(pkg, binName) {
   const manifestPath = require.resolve(`${pkg}/package.json`);
   const manifest = require(manifestPath);
-  return {
-    version: manifest.version,
-    bin: join(dirname(manifestPath), manifest.bin[binName]),
-  };
+  const bin = join(dirname(manifestPath), manifest.bin[binName]);
+  const version = spawnSync(process.execPath, [bin, "--version"], {
+    encoding: "utf8",
+  }).stdout.trim();
+  return { version, bin };
 }
 
 const compilers = [
