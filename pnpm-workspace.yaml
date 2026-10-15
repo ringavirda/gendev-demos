@@ -9,10 +9,5 @@ catalog:
   tsyringe: ^4.10.0
   reflect-metadata: ^0.2.2
   rimraf: ^6.1.3
-  vitest: ^5.0.5
+  vitest: ^5.0.4
   concurrently: ^10.0.6
-
-minimumReleaseAgeExclude:
-  - "@vitest/mocker@5.0.5"
-  - "@vitest/spy@5.0.5"
-  - vitest@5.0.5
