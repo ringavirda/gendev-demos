@@ -59,8 +59,8 @@ workspace with a library and a console app.
 
 ### Node packages, CLI and events vs async
 
-`apps/node-console` has one example per file, chosen by name. Without a name
-it prints the list.
+`apps/node-console` holds nine examples, each started by name; the readline,
+emitter and fs pairs share a file. Without a name it prints the list.
 
     pnpm --filter @gendev/node-console start
     pnpm --filter @gendev/node-console start readline-question
