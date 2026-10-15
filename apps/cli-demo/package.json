@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "tsc && concurrently --kill-others --raw \"tsc --watch --preserveWatchOutput\" \"node --watch dist/app.js\"",
+    "dev": "tsc --incremental && concurrently --kill-others --raw \"tsc --watch --incremental --preserveWatchOutput\" \"node --watch dist/app.js\"",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist"
   },
