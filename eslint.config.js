@@ -5,7 +5,7 @@ import tseslint from "typescript-eslint";
 
 export default defineConfig([
   {
-    ignores: ["**/dist/", "templates/"],
+    ignores: ["**/dist/", "apps/ts7/", "templates/"],
   },
   { languageOptions: { globals: globals.node } },
   pluginJs.configs.recommended,

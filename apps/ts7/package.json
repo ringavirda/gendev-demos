@@ -1,0 +1,21 @@
+{
+  "name": "@gendev/ts7",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "build:6": "tsc6 --outDir dist6",
+    "start": "node dist/app.js",
+    "typecheck": "tsc --noEmit",
+    "compare": "node scripts/compare.js",
+    "legacy:6": "tsc6 -p tsconfig.legacy.json --noEmit",
+    "legacy:7": "tsc -p tsconfig.legacy.json --noEmit",
+    "clean": "rimraf dist dist6"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@typescript/typescript6": "^6.0.2",
+    "rimraf": "catalog:",
+    "typescript": "~7.0.2"
+  }
+}
