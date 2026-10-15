@@ -1,7 +1,6 @@
 {
   "version": "2.0.0",
   "type": "shell",
-  "group": "build",
   "problemMatcher": "$tsc",
   "presentation": {
     "echo": true,
@@ -12,6 +11,7 @@
     "clear": false
   },
   "tasks": [
+    // All
     {
       "label": "Build all",
       "command": "pnpm build",
@@ -21,16 +21,208 @@
       }
     },
     {
+      "label": "Typecheck all",
+      "command": "pnpm typecheck",
+      "group": "build"
+    },
+    {
+      "label": "Test all",
+      "command": "pnpm test",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Lint",
+      "command": "pnpm lint",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Format",
+      "command": "pnpm format",
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean",
+      "command": "pnpm clean",
+      "problemMatcher": []
+    },
+    // Apps
+    {
       "label": "Build cli-demo",
-      "command": "pnpm --filter @gendev/cli-demo... build"
+      "command": "pnpm --filter @gendev/cli-demo... build",
+      "group": "build"
     },
     {
       "label": "Build princess",
-      "command": "pnpm --filter @gendev/princess... build"
+      "command": "pnpm --filter @gendev/princess... build",
+      "group": "build"
     },
     {
       "label": "Build ts-tour",
-      "command": "pnpm --filter @gendev/ts-tour... build"
+      "command": "pnpm --filter @gendev/ts-tour... build",
+      "group": "build"
+    },
+    {
+      "label": "Build ts7",
+      "command": "pnpm --filter @gendev/ts7 build",
+      "group": "build"
+    },
+    {
+      "label": "Build ts7 with tsc 6",
+      "command": "pnpm --filter @gendev/ts7 build:6",
+      "group": "build"
+    },
+    // Packages
+    {
+      "label": "Build cli-lib",
+      "command": "pnpm --filter @gendev/cli-lib build",
+      "group": "build"
+    },
+    {
+      "label": "Build example-runner",
+      "command": "pnpm --filter @gendev/example-runner build",
+      "group": "build"
+    },
+    {
+      "label": "Build ts-examples",
+      "command": "pnpm --filter @gendev/ts-examples... build",
+      "group": "build"
+    },
+    // Run
+    {
+      "label": "Start node-console",
+      "command": "pnpm --filter @gendev/node-console start ${input:example}",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Start cli-demo",
+      "command": "pnpm --filter @gendev/cli-demo start",
+      "dependsOn": ["Build cli-demo"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Start princess",
+      "command": "pnpm --filter @gendev/princess start",
+      "dependsOn": ["Build princess"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Start ts-tour",
+      "command": "pnpm --filter @gendev/ts-tour start ${input:topic}",
+      "dependsOn": ["Build ts-tour"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Start ts7",
+      "command": "pnpm --filter @gendev/ts7 start",
+      "dependsOn": ["Build ts7"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Compare tsc 6 and 7",
+      "command": "pnpm --filter @gendev/ts7 compare",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Legacy tsconfig with tsc 6",
+      "command": "pnpm --filter @gendev/ts7 legacy:6",
+      "problemMatcher": {
+        "base": "$tsc",
+        "fileLocation": ["relative", "${workspaceFolder}/apps/ts7"]
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Legacy tsconfig with tsc 7",
+      "command": "pnpm --filter @gendev/ts7 legacy:7",
+      "problemMatcher": {
+        "base": "$tsc",
+        "fileLocation": ["relative", "${workspaceFolder}/apps/ts7"]
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "example",
+      "type": "pickString",
+      "description": "Example",
+      "options": [
+        "stdin-events",
+        "readline-question",
+        "readline-events",
+        "readline-for-await",
+        "emitter-events",
+        "emitter-promise",
+        "fs-callbacks",
+        "fs-promises",
+        "commands"
+      ],
+      "default": "stdin-events"
+    },
+    {
+      "id": "topic",
+      "type": "pickString",
+      "description": "Topic",
+      "options": [
+        "classes",
+        "typing",
+        "generics",
+        "decorators",
+        "linked-list",
+        "all"
+      ],
+      "default": "all"
     }
   ]
 }

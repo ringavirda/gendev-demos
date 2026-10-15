@@ -45,6 +45,25 @@
       "outFiles": ["${workspaceFolder}/{apps,packages}/*/dist/**/*.js"],
       "args": ["${input:topic}"],
       "preLaunchTask": "Build ts-tour"
+    },
+    {
+      "name": "Debug ts7",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/ts7/dist/app.js",
+      "cwd": "${workspaceFolder}/apps/ts7",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/apps/ts7/dist/**/*.js"],
+      "preLaunchTask": "Build ts7"
+    },
+    {
+      "name": "Debug ts7 compare",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/ts7/scripts/compare.js",
+      "cwd": "${workspaceFolder}/apps/ts7",
+      "console": "integratedTerminal"
     }
   ],
   "inputs": [
@@ -77,7 +96,7 @@
         "linked-list",
         "all"
       ],
-      "default": "classes"
+      "default": "all"
     }
   ]
 }

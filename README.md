@@ -116,3 +116,8 @@ to get a copy and what to try in each one.
 ESLint with typescript-eslint, Prettier, TypeScript and vitest. The CI
 workflow in `.github/workflows/ci.yml` runs lint, build, typecheck and test,
 and builds and checks both templates.
+
+`.vscode/launch.json` has a debug configuration for every app (Run and Debug,
+F5), and `.vscode/tasks.json` builds, starts and tests them from Terminal >
+Run Task. The node-console and ts-tour entries ask which example or topic to
+run.
