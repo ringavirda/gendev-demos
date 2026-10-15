@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "node --watch src/app.js"
+    "dev": "node --watch src/app.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "chalk": "catalog:"
