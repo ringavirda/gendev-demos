@@ -1,54 +1,113 @@
-# Demos for GenDev in one repo
+# gendev-demos
 
-I will try to put everything here, but no promises (that is a pun).
+Small examples for the GenDev course, one topic each, in one pnpm workspace.
+The two web projects are in their own repositories:
 
-If you wanna study some questinable code, some of my old projects can be found here:
+- webdev-retro: https://github.com/ringavirda/webdev-retro
+- waifu-picker: https://github.com/ringavirda/request-response
 
-- [ringavirda/fallen-cli: There are too many features for a console app.](https://github.com/ringavirda/fallen-cli)
-- [ringavirda/math-phrase: Solve primary school math like a pro-programmer.](https://github.com/ringavirda/math-phrase)
-- [ringavirda/simple-website: The simpler the better.](https://github.com/ringavirda/simple-website)
+## Requirements
 
-Go and have some fun! (That's an order from Fallenstar)
+- Node.js 24. The `.nvmrc` file names the version.
+- pnpm. On Node 24, run `corepack enable` once and the pinned version is
+  used. Or run `npm install -g pnpm`. Node 25 and later no longer ship
+  corepack, so use `npm install -g pnpm` there.
 
-## @demo/nodo Basic demonstration of how to write node console app
+## Quick start
 
-There are several implementation of the same logic utilizing different API and styles in this demo. Javascript implementations contain:
+    pnpm install
+    pnpm build
+    pnpm --filter @gendev/ts-tour start generics
 
-- eventIO – the original way using `process` and event handlers.
-- readline – the same thing only with I/O streams being wrapped into standard `readline` interface. More "Imperative" approach.
-- crud – basic application with the capabilities of store and mutate date in JSON format. Due to conflicts between different ANSI injectors (chalk and readonly) it is quite buggy.
+Some apps run the compiled output in `dist`, so run `pnpm build` before
+starting them.
 
-To rectify the issue with Javascript implementations a Typescript version was added. To spice things app it also uses standard model-service architecture, and due to this uses dependency injection container. For some reason, even though this one is more complex, it works fine for some reason.
+## Layout
 
-To run both examples you can use the following commands (any package manager works, not only yarn):
+- `apps/` holds the programs you run.
+- `packages/` holds code that the apps share.
+- `templates/` holds starter projects that you copy.
 
-```powershell
-cd packages/node
-yarn start-js # for javascript examples, to switch implementation change app.js file.
+Run one workspace with `pnpm --filter @gendev/<name> <script>`. The name is
+the folder name with the `@gendev` scope in front. Each folder has a README
+with its own commands.
 
-yarn build # we need to compile ts first.
-yarn start-ts # for the typescript part.
-```
+## Topics
 
-The typescript part can be watched and served if needed.
+### Projects, package managers, monorepo and TypeScript setup
 
-## @demo/types
+Root workspace, `packages/ts-examples` (typing examples) and the templates.
 
-We use Typescript a lot, so there was a need for a demo of how to write code in it. I wouldn't call this the best demonstration of typescript or coding in general, but there are some useful hints about how to do stuff with types, generics and decorators. Make good use of it, since there aren't really a lot of examples about this out there.
+    pnpm --filter @gendev/ts-tour start typing
 
-This is a single application that runs all the examples in _"Example"_ classes. To control execution try using the `exampleRun` decorator. It runs everything by default.
+The templates are copied with tiged:
 
-To start this demo you need to do the following:
+    pnpm dlx tiged ringavirda/gendev-demos/templates/node-ts my-app
+    pnpm dlx tiged ringavirda/gendev-demos/templates/monorepo my-repo
 
-```powershell
-cd packages/types
+`node-ts` is one Node.js console app in TypeScript. `monorepo` is a pnpm
+workspace with a library and a console app.
 
-yarn build # since this is typescript.
-yarn start
-```
+### TypeScript 7
 
-You can serve it as well, if you need live dev environment.
+`apps/ts7` compiles the same source with TypeScript 7 and TypeScript 6.
 
-## @wp: waifu-picker
+    pnpm --filter @gendev/ts7 start
+    pnpm --filter @gendev/ts7 compare
 
-This is a git submodule pointing to the original repo: [ringavirda/waifu-picker: Select your waifu with style!](https://github.com/ringavirda/waifu-picker)
+`compare` times the two compilers on `packages/ts-examples`.
+
+### Node packages, CLI and events vs async
+
+`apps/node-console` has one example per file, chosen by name. Without a name
+it prints the list.
+
+    pnpm --filter @gendev/node-console start
+    pnpm --filter @gendev/node-console start readline-question
+    pnpm --filter @gendev/cli-demo start
+
+These examples do the same job in two styles:
+
+- stdin-events and readline-question
+- readline-events and readline-for-await
+- emitter-events and emitter-promise
+- fs-callbacks and fs-promises
+
+`packages/cli-lib` holds the command line code that `apps/cli-demo` and
+`apps/princess` use.
+
+### App structure, classes and DI
+
+`packages/ts-examples` has the class and generics examples. `apps/princess`
+is a selector CLI with layers and dependency injection.
+
+    pnpm --filter @gendev/ts-tour start classes
+    pnpm --filter @gendev/ts-tour start generics
+    pnpm --filter @gendev/princess start
+
+`ts-tour` takes one or more topics and runs them in the order given. `all`
+runs every topic.
+
+### Advanced TypeScript
+
+`packages/ts-examples` has the decorator examples and `linked-list`, a generic
+linked list. `packages/example-runner` registers and runs the example classes.
+
+    pnpm --filter @gendev/ts-tour start decorators
+    pnpm --filter @gendev/ts-tour start linked-list
+
+## Root scripts
+
+- `pnpm build` builds every workspace with tsc.
+- `pnpm typecheck` checks the types of every workspace.
+- `pnpm lint` runs ESLint over the repository.
+- `pnpm test` runs the vitest tests of every workspace.
+- `pnpm format` formats the repository with Prettier.
+- `pnpm dev` runs the dev script of every package in `packages/`.
+- `pnpm clean` removes the `dist` folders.
+
+## Tooling
+
+ESLint with typescript-eslint, Prettier, TypeScript and vitest. The CI
+workflow in `.github/workflows/ci.yml` runs lint, build, typecheck and test,
+and builds and checks both templates.
