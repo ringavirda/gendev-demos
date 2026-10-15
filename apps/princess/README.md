@@ -20,7 +20,7 @@ dependency injection.
 - `remove` or `rm` removes a princess from a category.
 - `change` or `ch` changes the names of a princess.
 
-`help` or `h` and `exit`, `quit` or `q` come from cli-lib.
+`help` or `h` comes from cli-lib. `exit`, `quit` or `q` replaces cli-lib's default in `app.ts` and prints a goodbye line before it exits.
 
 ## Run
 

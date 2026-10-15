@@ -53,7 +53,7 @@ describe("Executor duplicate selectors", () => {
   });
 
   it("registers a command with no shared selector beside the defaults", async () => {
-    const { executor } = createExecutor();
+    const { cli, executor } = createExecutor();
     const action = vi.fn(async () => {});
     executor.registerCommand({ selectors: ["hello"], actionAsync: action });
 
@@ -63,5 +63,10 @@ describe("Executor duplicate selectors", () => {
       list: [],
     });
     expect(action).toHaveBeenCalledOnce();
+
+    await executor.executeAsync({ raw: ["h"], selector: "h", list: [] });
+    expect(cli.echoSuccess).toHaveBeenCalledWith(
+      "Supported command signatures:",
+    );
   });
 });

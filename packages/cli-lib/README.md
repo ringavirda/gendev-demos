@@ -4,7 +4,7 @@ Shared pieces for the command line apps in this repo.
 
 ## Exports
 
-- `CLI` wraps a readline interface on stdin and stdout.
+- `CLI` wraps a readline interface on stdin and stdout. It exits the process with status 0 when its input closes: Ctrl+D, the end of a pipe, or a call to `close()`.
 - `Executor` keeps the command list and runs a command by its selector.
 - `JsonLoader` keeps a state object in a JSON file under `dist`.
 - Types `Command`, `CommandArgs`, `EchoColors` and `EchoOptions`.
