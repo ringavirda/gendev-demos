@@ -2,50 +2,94 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug @demos/yarn",
-      "request": "launch",
-      "runtimeArgs": ["workspace", "@demos/yarn", "start"],
-      "runtimeExecutable": "yarn",
+      "name": "Debug node-console",
       "type": "node",
-      "console": "integratedTerminal",
-      "preLaunchTask": "Build @demos/yarn"
-    },
-    {
-      "name": "Debug @demos/examples",
       "request": "launch",
-      "runtimeArgs": ["workspace", "@demos/examples", "start"],
-      "runtimeExecutable": "yarn",
-      "type": "node",
+      "program": "${workspaceFolder}/apps/node-console/src/app.js",
+      "cwd": "${workspaceFolder}/apps/node-console",
       "console": "integratedTerminal",
-      "preLaunchTask": "Build @demos/examples",
       "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///./~/*": "${workspaceFolder}/node_modules/*",
-        "webpack://?:*/*": "${workspaceFolder}/*"
-      }
+      "outFiles": [
+        "${workspaceFolder}/{apps,packages}/*/dist/**/*.js"
+      ],
+      "args": [
+        "${input:example}"
+      ]
     },
     {
-      "name": "Debug @cli/demo",
-      "request": "launch",
-      "runtimeArgs": ["workspace", "@cli/demo", "start"],
-      "runtimeExecutable": "yarn",
+      "name": "Debug cli-demo",
       "type": "node",
-      "console": "integratedTerminal",
-      "preLaunchTask": "Build @cli/demo"
-    },
-    {
-      "name": "Debug @cli/princess",
       "request": "launch",
-      "runtimeArgs": ["workspace", "@cli/princess", "start"],
-      "runtimeExecutable": "yarn",
-      "type": "node",
+      "program": "${workspaceFolder}/apps/cli-demo/dist/app.js",
+      "cwd": "${workspaceFolder}/apps/cli-demo",
       "console": "integratedTerminal",
-      "preLaunchTask": "Build @cli/princess",
       "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///./~/*": "${workspaceFolder}/node_modules/*",
-        "webpack://?:*/*": "${workspaceFolder}/*"
-      }
+      "outFiles": [
+        "${workspaceFolder}/{apps,packages}/*/dist/**/*.js"
+      ],
+      "preLaunchTask": "Build cli-demo"
+    },
+    {
+      "name": "Debug princess",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/princess/dist/app.js",
+      "cwd": "${workspaceFolder}/apps/princess",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/{apps,packages}/*/dist/**/*.js"
+      ],
+      "preLaunchTask": "Build princess"
+    },
+    {
+      "name": "Debug ts-tour",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/ts-tour/dist/app.js",
+      "cwd": "${workspaceFolder}/apps/ts-tour",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/{apps,packages}/*/dist/**/*.js"
+      ],
+      "args": [
+        "${input:topic}"
+      ],
+      "preLaunchTask": "Build ts-tour"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "example",
+      "type": "pickString",
+      "description": "Example",
+      "options": [
+        "stdin-events",
+        "readline-question",
+        "readline-events",
+        "readline-for-await",
+        "emitter-events",
+        "emitter-promise",
+        "fs-callbacks",
+        "fs-promises",
+        "commands"
+      ],
+      "default": "stdin-events"
+    },
+    {
+      "id": "topic",
+      "type": "pickString",
+      "description": "Topic",
+      "options": [
+        "classes",
+        "typing",
+        "generics",
+        "decorators",
+        "linked-list",
+        "all"
+      ],
+      "default": "classes"
     }
   ]
 }

@@ -5,7 +5,7 @@ end_of_line = lf
 insert_final_newline = true
 max_line_length = 80
 
-[*.{ts, js,json,yml}]
+[*.{js,mjs,ts,json,yml,yaml}]
 charset = utf-8
 indent_style = space
 indent_size = 2

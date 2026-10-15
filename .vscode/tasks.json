@@ -12,48 +12,25 @@
     "clear": false
   },
   "tasks": [
-    // All
     {
-      "label": "Build All",
-      "command": "yarn build-all",
+      "label": "Build all",
+      "command": "pnpm build",
       "group": {
         "kind": "build",
         "isDefault": true
       }
     },
-    // Apps
     {
-      "label": "Build @demos/yarn",
-      "command": "yarn workspace @demos/yarn build"
+      "label": "Build cli-demo",
+      "command": "pnpm --filter @gendev/cli-demo... build"
     },
     {
-      "label": "Build @demos/examples",
-      "command": "yarn workspace @demos/examples build",
-      "dependsOn": ["Build @demos/prefabs"]
+      "label": "Build princess",
+      "command": "pnpm --filter @gendev/princess... build"
     },
     {
-      "label": "Build @cli/demo",
-      "command": "yarn workspace @cli/demo build",
-      "dependsOn": ["Build @cli/lib"]
-    },
-    {
-      "label": "Build @cli/princess",
-      "command": "yarn workspace @cli/princess build",
-      "dependsOn": ["Build @cli/lib"]
-    },
-    // Packages
-    {
-      "label": "Build @demos/prefabs",
-      "command": "yarn workspace @demos/prefabs build"
-    },
-    {
-      "label": "Build @demos/oop",
-      "command": "yarn workspace @demos/oop build",
-      "dependsOn": ["Build @demos/oop"]
-    },
-    {
-      "label": "Build @cli/lib",
-      "command": "yarn workspace @cli/lib build"
+      "label": "Build ts-tour",
+      "command": "pnpm --filter @gendev/ts-tour... build"
     }
   ]
 }
