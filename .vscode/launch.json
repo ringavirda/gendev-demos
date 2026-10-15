@@ -9,12 +9,8 @@
       "cwd": "${workspaceFolder}/apps/node-console",
       "console": "integratedTerminal",
       "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/{apps,packages}/*/dist/**/*.js"
-      ],
-      "args": [
-        "${input:example}"
-      ]
+      "outFiles": ["${workspaceFolder}/{apps,packages}/*/dist/**/*.js"],
+      "args": ["${input:example}"]
     },
     {
       "name": "Debug cli-demo",
@@ -24,9 +20,7 @@
       "cwd": "${workspaceFolder}/apps/cli-demo",
       "console": "integratedTerminal",
       "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/{apps,packages}/*/dist/**/*.js"
-      ],
+      "outFiles": ["${workspaceFolder}/{apps,packages}/*/dist/**/*.js"],
       "preLaunchTask": "Build cli-demo"
     },
     {
@@ -37,9 +31,7 @@
       "cwd": "${workspaceFolder}/apps/princess",
       "console": "integratedTerminal",
       "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/{apps,packages}/*/dist/**/*.js"
-      ],
+      "outFiles": ["${workspaceFolder}/{apps,packages}/*/dist/**/*.js"],
       "preLaunchTask": "Build princess"
     },
     {
@@ -50,12 +42,8 @@
       "cwd": "${workspaceFolder}/apps/ts-tour",
       "console": "integratedTerminal",
       "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/{apps,packages}/*/dist/**/*.js"
-      ],
-      "args": [
-        "${input:topic}"
-      ],
+      "outFiles": ["${workspaceFolder}/{apps,packages}/*/dist/**/*.js"],
+      "args": ["${input:topic}"],
       "preLaunchTask": "Build ts-tour"
     }
   ],

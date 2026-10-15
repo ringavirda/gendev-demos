@@ -27,10 +27,10 @@ cd packages/node
 yarn start-js # for javascript examples, to switch implementation change app.js file.
 
 yarn build # we need to compile ts first.
-yarn start-ts # for the typescript part. 
+yarn start-ts # for the typescript part.
 ```
 
-The typescript part can be watched and  served if needed.
+The typescript part can be watched and served if needed.
 
 ## @demo/types
 
