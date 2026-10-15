@@ -20,3 +20,29 @@ jobs:
       - run: pnpm build
       - run: pnpm typecheck
       - run: pnpm test
+
+  templates:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        template: [node-ts, monorepo]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: cp -r templates/${{ matrix.template }} "$RUNNER_TEMP/${{ matrix.template }}"
+      - run: pnpm install --no-frozen-lockfile
+        working-directory: ${{ runner.temp }}/${{ matrix.template }}
+      - run: pnpm build
+        working-directory: ${{ runner.temp }}/${{ matrix.template }}
+      - run: pnpm start
+        working-directory: ${{ runner.temp }}/${{ matrix.template }}
+      - run: pnpm lint
+        working-directory: ${{ runner.temp }}/${{ matrix.template }}
+      - run: pnpm typecheck
+        working-directory: ${{ runner.temp }}/${{ matrix.template }}
+      - run: pnpm test
+        working-directory: ${{ runner.temp }}/${{ matrix.template }}
