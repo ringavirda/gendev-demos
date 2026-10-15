@@ -9,13 +9,16 @@ class App {
     private readonly _cli: CLI,
     private readonly _executor: Executor,
   ) {
-    this._executor.registerCommand({
-      selectors: ["quit", "q"],
-      actionAsync: () => {
-        this._cli.echo("Exiting...");
-        process.exit(0);
+    this._executor.registerCommand(
+      {
+        selectors: ["quit", "q"],
+        actionAsync: async () => {
+          this._cli.echo("Exiting...");
+          process.exit(0);
+        },
       },
-    });
+      true,
+    );
   }
 
   public async run() {

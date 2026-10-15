@@ -22,6 +22,9 @@ export class CLI {
       this._cli.close();
       process.exit(0);
     });
+    this._cli.on("close", () => {
+      process.exit(0);
+    });
   }
 
   public close(): void {
