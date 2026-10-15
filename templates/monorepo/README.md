@@ -37,7 +37,7 @@ tsx uses, is allowed there.
   esbuild install script.
 - `tsconfig.base.json` holds the compiler options every workspace extends.
 - `eslint.config.js`, `.editorconfig` and `.prettierignore` are the root lint and format setup.
-  Prettier reads the editor settings and skips `dist`.
+  Prettier reads the editor settings and skips `dist` and `pnpm-lock.yaml`.
 - `.gitignore` keeps `node_modules` and `dist` out of git.
 - `packages/greeting` is a library. `src/index.ts` exports `greet`, `src/index.test.ts` holds its
   vitest tests, and its declarations go to `dist`.

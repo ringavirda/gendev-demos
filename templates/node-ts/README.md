@@ -34,7 +34,7 @@ tsx uses, is allowed there.
 - `tsconfig.json` sets the compiler options and keeps test files out of `dist`.
 - `eslint.config.js` sets the ESLint rules for JavaScript and TypeScript.
 - `.editorconfig` and `.prettierignore` are read by Prettier: 80 columns, two spaces, and `dist`
-  is skipped.
+  and `pnpm-lock.yaml` are skipped.
 - `.gitignore` keeps `node_modules` and `dist` out of git.
 - `src/greet.ts` exports `greet`, which returns the greeting.
 - `src/app.ts` is the entry point; it prints the greeting for the name in the first argument.
