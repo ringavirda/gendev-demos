@@ -206,7 +206,7 @@
         "emitter-promise",
         "fs-callbacks",
         "fs-promises",
-        "commands"
+        "selector"
       ],
       "default": "stdin-events"
     },

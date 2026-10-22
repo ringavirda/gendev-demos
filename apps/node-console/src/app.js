@@ -58,25 +58,11 @@ const examples = {
       await runFsPromises();
     },
   },
-  commands: {
-    description: "Princess selector CLI with a command list.",
+  selector: {
+    description: "Princess selector CLI with layered classes.",
     run: async () => {
-      const { cli, startCli } = await import("./examples/commands/cli.js");
-      const startRequest = {
-        hello:
-          "Princess selector CLI!\nUse (help) to see command list, or (q) to exit.",
-        prompt: "->",
-        quit: ["exit", "quit", "q"],
-        commands: [
-          {
-            selectors: ["test"],
-            action: () => {
-              cli.echoSuccess("This is a test command.");
-            },
-          },
-        ],
-      };
-      await startCli(startRequest);
+      const { runSelector } = await import("./selector/main.js");
+      await runSelector();
     },
   },
 };
@@ -90,15 +76,19 @@ const usage = () => {
 };
 
 let positionals;
+let values;
 try {
-  ({ positionals } = parseArgs({ allowPositionals: true }));
+  ({ positionals, values } = parseArgs({
+    allowPositionals: true,
+    options: { help: { type: "boolean", short: "h" } },
+  }));
 } catch (error) {
   console.error(`${error.message}\n\n${usage()}`);
   process.exit(1);
 }
 const [name] = positionals;
 
-if (name === undefined) {
+if (values.help || name === undefined) {
   console.log(usage());
 } else if (!Object.hasOwn(examples, name)) {
   console.error(`Unknown example: ${name}\n\n${usage()}`);
