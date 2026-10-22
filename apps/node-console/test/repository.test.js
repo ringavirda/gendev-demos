@@ -117,7 +117,14 @@ describe("PrincessRepository", () => {
   });
 
   it("throws on a broken file and leaves it", async () => {
-    for (const bytes of ["{", "[]", '{"young": [1]}']) {
+    for (const bytes of [
+      "{",
+      "[]",
+      '{"young": [1]}',
+      "null",
+      "5",
+      '{"young": "Twilight"}',
+    ]) {
       await writeFile(path, bytes);
       await expect(loaded()).rejects.toThrow(`Cannot read state file ${path}:`);
       expect(await readFile(path, "utf8")).toBe(bytes);
