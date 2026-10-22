@@ -1,21 +1,19 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Executor } from "../src/selector/executor.js";
 
 describe("Executor", () => {
   let output;
   let executor;
-  let calls;
 
-  const command = (selectors, params, action) => ({
+  const command = (selectors, params, action = vi.fn()) => ({
     selectors,
     params,
     description: "Test command.",
-    action: action ?? ((...words) => void calls.push([selectors[0], words])),
+    action,
   });
 
   beforeEach(() => {
     output = [];
-    calls = [];
     const push = (kind) => (message) => output.push([kind, message]);
     executor = new Executor({
       echo: push("echo"),
@@ -26,22 +24,24 @@ describe("Executor", () => {
   });
 
   it("runs a command by any selector with its words", async () => {
-    executor.registerCommand(command(["add", "a"], ["category", "name"]));
+    const add = command(["add", "a"], ["category", "name"]);
+    executor.registerCommand(add);
     await executor.execute("a young Rarity");
     await executor.execute("add young Rarity");
     await executor.execute("  add \t young   Rarity  ");
-    expect(calls).toEqual([
-      ["add", ["young", "Rarity"]],
-      ["add", ["young", "Rarity"]],
-      ["add", ["young", "Rarity"]],
+    expect(add.action.mock.calls).toEqual([
+      ["young", "Rarity"],
+      ["young", "Rarity"],
+      ["young", "Rarity"],
     ]);
   });
 
   it("ignores an empty line", async () => {
-    executor.registerCommand(command(["a"], []));
+    const a = command(["a"], []);
+    executor.registerCommand(a);
     await executor.execute("   ");
     expect(output).toEqual([]);
-    expect(calls).toEqual([]);
+    expect(a.action).not.toHaveBeenCalled();
   });
 
   it("reports an unknown command", async () => {
@@ -50,8 +50,10 @@ describe("Executor", () => {
   });
 
   it("checks the word count against params", async () => {
-    executor.registerCommand(command(["add", "a"], ["category", "name"]));
-    executor.registerCommand(command(["ls"], ["category?"]));
+    const add = command(["add", "a"], ["category", "name"]);
+    const ls = command(["ls"], ["category?"]);
+    executor.registerCommand(add);
+    executor.registerCommand(ls);
     await executor.execute("add young");
     await executor.execute("ls");
     await executor.execute("ls young");
@@ -60,10 +62,8 @@ describe("Executor", () => {
       ["error", "Usage: add <category> <name>"],
       ["error", "Usage: ls [category]"],
     ]);
-    expect(calls).toEqual([
-      ["ls", []],
-      ["ls", ["young"]],
-    ]);
+    expect(add.action).not.toHaveBeenCalled();
+    expect(ls.action.mock.calls).toEqual([[], ["young"]]);
   });
 
   it("prints a thrown error and keeps going", async () => {
@@ -77,7 +77,8 @@ describe("Executor", () => {
         throw new Error("later");
       }),
     );
-    executor.registerCommand(command(["ok"], []));
+    const ok = command(["ok"], []);
+    executor.registerCommand(ok);
     await executor.execute("boom");
     await executor.execute("ok");
     await executor.execute("later");
@@ -85,7 +86,7 @@ describe("Executor", () => {
       ["error", "boom"],
       ["error", "later"],
     ]);
-    expect(calls).toEqual([["ok", []]]);
+    expect(ok.action).toHaveBeenCalledOnce();
   });
 
   it("refuses a taken selector", () => {
