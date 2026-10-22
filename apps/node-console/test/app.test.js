@@ -22,7 +22,7 @@ const runSelector = (file, input) =>
     const child = execFile(
       process.execPath,
       [app, "selector"],
-      { env: { ...process.env, SELECTOR_DATA: file } },
+      { env: { ...process.env, SELECTOR_DATA: file }, timeout: 5000 },
       (error, stdout, stderr) =>
         resolve({ code: error ? error.code : 0, stdout, stderr }),
     );
@@ -39,17 +39,15 @@ describe("app arguments", () => {
     );
   });
 
-  it("prints usage on --help", async () => {
-    const { stdout } = await run(
-      process.execPath,
-      [app, "selector", "--help"],
-      {
+  it("prints usage on --help and -h", async () => {
+    for (const flag of ["--help", "-h"]) {
+      const { stdout } = await run(process.execPath, [app, "selector", flag], {
         timeout: 5000,
-      },
-    );
-    expect(stdout).toContain(
-      "Usage: pnpm --filter @gendev/node-console start <example>",
-    );
+      });
+      expect(stdout).toContain(
+        "Usage: pnpm --filter @gendev/node-console start <example>",
+      );
+    }
   });
 });
 

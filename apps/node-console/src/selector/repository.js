@@ -4,6 +4,9 @@ import { PrincessDict } from "../princesses.js";
 
 const isIndex = (word) => /^\d+$/.test(word);
 
+const stateError = (path, reason, cause) =>
+  new Error(`Cannot read state file ${path}: ${reason}`, { cause });
+
 const isStateShape = (value) =>
   typeof value === "object" &&
   value !== null &&
@@ -44,28 +47,16 @@ export class PrincessRepository {
         );
         return;
       }
-      throw new Error(
-        `Cannot read state file ${this.#path}: ${error.message}`,
-        {
-          cause: error,
-        },
-      );
+      throw stateError(this.#path, error.message, error);
     }
     let data;
     try {
       data = JSON.parse(text);
     } catch (error) {
-      throw new Error(
-        `Cannot read state file ${this.#path}: ${error.message}`,
-        {
-          cause: error,
-        },
-      );
+      throw stateError(this.#path, error.message, error);
     }
     if (!isStateShape(data)) {
-      throw new Error(
-        `Cannot read state file ${this.#path}: expected an object of name lists.`,
-      );
+      throw stateError(this.#path, "expected an object of name lists.");
     }
     this.#categories = new Map(Object.entries(data));
   }

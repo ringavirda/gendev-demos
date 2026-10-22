@@ -1,5 +1,4 @@
-import { resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join, resolve } from "node:path";
 import { CLI } from "./cli.js";
 import { createCommands } from "./commands.js";
 import { Executor } from "./executor.js";
@@ -10,7 +9,7 @@ const quit = ["exit", "quit", "q"];
 const statePath = () =>
   process.env.SELECTOR_DATA
     ? resolve(process.env.SELECTOR_DATA)
-    : fileURLToPath(new URL("../../data/selector.json", import.meta.url));
+    : join(import.meta.dirname, "../../data/selector.json");
 
 /**
  * Runs the princess selector on the terminal until the input ends or a quit
@@ -37,12 +36,9 @@ export const runSelector = async () => {
 
   cli.echo("Princess selector CLI!");
   cli.echo("Use (help) to see command list, or (q) to exit.");
-  for (
-    let line = await cli.read("->");
-    line !== null;
-    line = await cli.read("->")
-  ) {
-    if (quit.includes(line.trim())) break;
+  while (true) {
+    const line = await cli.read("->");
+    if (line === null || quit.includes(line.trim())) break;
     await executor.execute(line);
   }
   cli.close();
