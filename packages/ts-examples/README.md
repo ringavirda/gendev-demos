@@ -29,5 +29,6 @@ The standard decorators example, `StdDecoratorExamples`, lives in
 
 The package turns on `experimentalDecorators` because the examples use the
 legacy decorators: the legacy method signature and parameter decorators, which
-the standard decorators lack. The `reflect-metadata` calls work without
-`emitDecoratorMetadata`.
+the standard decorators lack. It also turns on `emitDecoratorMetadata`, so
+tsc records `design:type`, `design:paramtypes` and `design:returntype`, which
+the design metadata example reads.
