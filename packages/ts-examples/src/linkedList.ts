@@ -1,212 +1,167 @@
-import { ExamplesBase, registerExamples } from "@gendev/example-runner";
-
-@registerExamples()
-export class LinkedListExamples extends ExamplesBase {
-  exampleUsage(): void {
-    const list = new LinkedList<string>();
-
-    // Add-last-get tests
-
-    list.addLast("first");
-    list.addLast("second");
-    list.addLast("third");
-
-    console.log(list.at(0));
-    console.log(list.at(1));
-    console.log(list.at(2));
-
-    console.log();
-    // Clear-list tests
-
-    list.clear();
-    console.log(list);
-
-    console.log();
-    // Add-first tests
-
-    list.addFirst("first");
-    list.addFirst("second");
-    list.addFirst("third");
-
-    console.log(list.at(0));
-    console.log(list.at(1));
-    console.log(list.at(2));
-
-    console.log();
-    // Insert tests
-
-    list.insert(1, "inserted");
-    console.log(list.at(0));
-    console.log(list.at(1));
-    console.log(list.at(2));
-    console.log(list.at(3));
-
-    console.log();
-    // Change tests
-
-    list.change(0, "changed");
-    console.log(list.at(0));
-    console.log(list.at(1));
-    console.log(list.at(2));
-    console.log(list.at(3));
-  }
-}
-
-class Node<T> {
+class ListNode<T> {
   constructor(
-    public prev: Node<T> | null,
-    public next: Node<T> | null,
     public value: T,
-    public index: number,
+    public prev: ListNode<T> | null = null,
+    public next: ListNode<T> | null = null,
   ) {}
 }
 
-class LinkedList<T> {
-  private head: Node<T> | null = null;
-  private tail: Node<T> | null = null;
+/**
+ * Doubly linked list. Indices are zero-based and counted from the first value.
+ */
+export class LinkedList<T> implements Iterable<T> {
+  private head: ListNode<T> | null = null;
+  private tail: ListNode<T> | null = null;
+  private count = 0;
 
-  first() {
+  /**
+   * @param items Values to add in iteration order.
+   */
+  constructor(items?: Iterable<T>) {
+    if (items) for (const item of items) this.addLast(item);
+  }
+
+  /** Number of values in the list. */
+  get size(): number {
+    return this.count;
+  }
+
+  /** @returns The first value, or `undefined` when the list is empty. */
+  first(): T | undefined {
     return this.head?.value;
   }
-  last() {
+
+  /** @returns The last value, or `undefined` when the list is empty. */
+  last(): T | undefined {
     return this.tail?.value;
   }
 
-  at(n: number): T | undefined {
-    const node = this.getNodeAt(n);
-    return node?.value;
+  /**
+   * @param index Position of the value, from 0 to `size - 1`.
+   * @returns The value, or `undefined` when the index is out of range.
+   */
+  at(index: number): T | undefined {
+    return this.nodeAt(index)?.value;
   }
 
-  find(predicate: (data: T) => boolean): T | undefined {
-    let node = this.head;
-    while (node) {
-      if (predicate(node.value)) return node.value;
-      node = node.next;
+  /**
+   * @param predicate Called with each value from the first on.
+   * @returns The first value the predicate accepts, or `undefined` when none.
+   */
+  find(predicate: (value: T) => boolean): T | undefined {
+    for (const value of this) {
+      if (predicate(value)) return value;
     }
     return undefined;
   }
 
-  addFirst(data: T) {
-    const newNode = new Node(null, this.head, data, 0);
-    if (!this.head) {
-      this.head = this.tail = newNode;
-    } else {
-      this.updateIndices(this.head, 1);
-      this.head.prev = newNode;
-      this.head = newNode;
-    }
+  /** @param value Value to put before the current first one. */
+  addFirst(value: T): void {
+    const node = new ListNode(value, null, this.head);
+    if (this.head) this.head.prev = node;
+    else this.tail = node;
+    this.head = node;
+    this.count++;
   }
 
-  addLast(data: T) {
-    const newNode = new Node(
-      this.tail,
-      null,
-      data,
-      this.tail ? this.tail.index + 1 : 0,
-    );
-    if (!this.tail) {
-      this.head = this.tail = newNode;
-    } else {
-      this.tail.next = newNode;
-      this.tail = newNode;
-    }
+  /** @param value Value to put after the current last one. */
+  addLast(value: T): void {
+    const node = new ListNode(value, this.tail, null);
+    if (this.tail) this.tail.next = node;
+    else this.head = node;
+    this.tail = node;
+    this.count++;
   }
 
-  insert(n: number, ...items: T[]) {
-    if (!items.length) return;
-    if (!this.head && n === 0) {
-      items.forEach((item) => this.addLast(item));
-      return;
+  /**
+   * @param index Position of the first inserted value, from 0 to `size`.
+   * @param values Values to insert, kept in the given order.
+   * @throws {RangeError} When the index is outside 0 to `size`.
+   */
+  insert(index: number, ...values: T[]): void {
+    if (!Number.isInteger(index) || index < 0 || index > this.count) {
+      throw new RangeError(`Index ${index} is out of range`);
     }
-    if (this.tail && n === this.tail.index + 1) {
-      items.forEach((item) => this.addLast(item));
-      return;
-    }
-    const node = this.getNodeAt(n);
-    if (node) {
-      let prev = node.prev;
-      items.forEach((item, i) => {
-        const newNode = new Node(prev, null, item, n + i);
-        if (prev) prev.next = newNode;
-        prev = newNode;
-        if (i === 0) node.prev = newNode;
-      });
-      prev!.next = node;
-      this.updateIndices(node, items.length);
-      if (n === 0) this.head = node.prev;
-    }
-  }
-
-  size() {
-    return this.tail ? this.tail.index + 1 : 0;
-  }
-  clear() {
-    this.head = this.tail = null;
-  }
-  clone(): LinkedList<T> {
-    return new LinkedList<T>();
-  }
-
-  toArray(): T[] {
-    const arr: T[] = [];
-    let node = this.head;
-    while (node) {
-      arr.push(node.value);
-      node = node.next;
-    }
-    return arr;
-  }
-
-  change(n: number, data: T) {
-    const node = this.getNodeAt(n);
-    if (node) node.value = data;
-  }
-
-  remove(data: T) {
-    let node = this.head;
-    while (node) {
-      if (node.value === data) {
-        this.removeNode(node);
-        return;
+    for (const value of values) {
+      if (index === this.count) {
+        this.addLast(value);
+      } else {
+        const next = this.nodeAt(index)!;
+        const node = new ListNode(value, next.prev, next);
+        if (next.prev) next.prev.next = node;
+        else this.head = node;
+        next.prev = node;
+        this.count++;
       }
-      node = node.next;
+      index++;
     }
   }
 
-  removeAt(n: number) {
-    const node = this.getNodeAt(n);
-    if (node) this.removeNode(node);
+  /**
+   * @param index Position of the value to replace, from 0 to `size - 1`.
+   * @param value The new value.
+   * @throws {RangeError} When the index is out of range.
+   */
+  set(index: number, value: T): void {
+    const node = this.nodeAt(index);
+    if (!node) throw new RangeError(`Index ${index} is out of range`);
+    node.value = value;
   }
 
-  removeFirst() {
-    this.removeAt(0);
-  }
-  removeLast() {
-    this.removeAt(this.size() - 1);
+  /**
+   * @param index Position of the value to remove, from 0 to `size - 1`.
+   * @returns The removed value, or `undefined` when the index is out of range.
+   */
+  removeAt(index: number): T | undefined {
+    const node = this.nodeAt(index);
+    if (!node) return undefined;
+    this.unlink(node);
+    return node.value;
   }
 
-  private getNodeAt(n: number): Node<T> | null {
-    let node = this.head;
-    while (node && node.index !== n) node = node.next;
+  /**
+   * @param value Value to remove, compared with `===`.
+   * @returns `true` when a value was removed; only the first match goes.
+   */
+  remove(value: T): boolean {
+    for (let node = this.head; node; node = node.next) {
+      if (node.value === value) {
+        this.unlink(node);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /** Removes every value. */
+  clear(): void {
+    this.head = this.tail = null;
+    this.count = 0;
+  }
+
+  /** @returns A new list with the same values; changing one list leaves the other alone. */
+  clone(): LinkedList<T> {
+    return new LinkedList(this);
+  }
+
+  *[Symbol.iterator](): Iterator<T> {
+    for (let node = this.head; node; node = node.next) yield node.value;
+  }
+
+  private nodeAt(index: number): ListNode<T> | null {
+    if (!Number.isInteger(index) || index < 0 || index >= this.count) {
+      return null;
+    }
+    let node = this.head!;
+    for (let i = 0; i < index; i++) node = node.next!;
     return node;
   }
 
-  private updateIndices(start: Node<T> | null, delta: number) {
-    let node = start;
-    while (node) {
-      node.index += delta;
-      node = node.next;
-    }
-  }
-
-  private removeNode(node: Node<T>) {
+  private unlink(node: ListNode<T>): void {
     if (node.prev) node.prev.next = node.next;
     else this.head = node.next;
-    if (node.next) {
-      node.next.prev = node.prev;
-      this.updateIndices(node.next, -1);
-    } else {
-      this.tail = node.prev;
-    }
+    if (node.next) node.next.prev = node.prev;
+    else this.tail = node.prev;
+    this.count--;
   }
 }
