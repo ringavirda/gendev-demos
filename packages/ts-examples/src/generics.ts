@@ -3,7 +3,7 @@ import { ExamplesBase, registerExamples } from "@gendev/example-runner";
 @registerExamples()
 export class GenericExamples extends ExamplesBase {
   exampleFunctions() {
-    const first = <T>(items: T[]): T => items[0];
+    const first = <T>(items: readonly T[]): T | undefined => items[0];
 
     this.log(first([3, 1, 2]));
     this.log(first(["Twilight", "Spike"]));
@@ -42,7 +42,7 @@ export class GenericExamples extends ExamplesBase {
         this.items = items;
       }
 
-      get(index: number): T {
+      get(index: number): T | undefined {
         return this.items[index];
       }
 
@@ -53,12 +53,14 @@ export class GenericExamples extends ExamplesBase {
         else this.items.push(args[0]);
       }
 
-      removeAt(index: number): void {
+      removeAt(index: number): boolean {
+        if (index < 0 || index >= this.items.length) return false;
         this.items.splice(index, 1);
+        return true;
       }
 
-      remove(item: T): void {
-        this.removeAt(this.items.indexOf(item));
+      remove(item: T): boolean {
+        return this.removeAt(this.items.indexOf(item));
       }
 
       toString(): string {

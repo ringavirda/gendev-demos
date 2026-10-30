@@ -81,7 +81,7 @@ export class PolymorphismExamples extends ExamplesBase {
 
     this.log(greet({ name: "Spike" }));
     // @ts-expect-error: a private member makes the class nominal
-    this.log(greetGuarded({ name: "Spike" }));
+    this.log(greetGuarded({ name: "Spike", secret: "key" }));
     this.log(greetGuarded(new Guarded("Luna")));
   }
 }
