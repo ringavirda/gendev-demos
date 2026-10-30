@@ -39,18 +39,18 @@ export class NarrowingExamples extends ExamplesBase {
 
   exampleDiscriminatedUnion() {
     type Pony =
-      | { kind: "pegasus"; wingspan: number }
+      | { kind: "pegasus"; weather: string }
       | { kind: "unicorn"; spell: string }
-      | { kind: "earth"; strength: number };
+      | { kind: "earth"; harvest: string };
 
     const ability = (pony: Pony): string => {
       switch (pony.kind) {
         case "pegasus":
-          return `wingspan ${pony.wingspan}`;
+          return `weather ${pony.weather}`;
         case "unicorn":
           return `spell ${pony.spell}`;
         case "earth":
-          return `strength ${pony.strength}`;
+          return `harvest ${pony.harvest}`;
         default: {
           const unreachable: never = pony;
           return unreachable;
@@ -58,13 +58,13 @@ export class NarrowingExamples extends ExamplesBase {
       }
     };
 
-    this.log(ability({ kind: "pegasus", wingspan: 2 }));
+    this.log(ability({ kind: "pegasus", weather: "rain" }));
     this.log(ability({ kind: "unicorn", spell: "teleport" }));
-    this.log(ability({ kind: "earth", strength: 9 }));
+    this.log(ability({ kind: "earth", harvest: "apples" }));
   }
 
   exampleUnknownAndAny() {
-    const text = '{"name":"Twilight","friends":["Spike"]}';
+    const text = '{"name":"Twilight Sparkle","friends":["Spike"]}';
 
     const loose = JSON.parse(text);
     try {
@@ -92,25 +92,25 @@ export class NarrowingExamples extends ExamplesBase {
     }
 
     interface Pegasus extends Pony {
-      wingspan: number;
+      weather: string;
     }
 
-    const isPegasus = (pony: Pony): pony is Pegasus => "wingspan" in pony;
+    const isPegasus = (pony: Pony): pony is Pegasus => "weather" in pony;
 
     function assertPegasus(pony: Pony): asserts pony is Pegasus {
       if (!isPegasus(pony)) throw new TypeError(`${pony.name} has no wings`);
     }
 
-    const rainbow: Pegasus = { name: "Rainbow", wingspan: 2 };
+    const rainbow: Pegasus = { name: "Rainbow Dash", weather: "clears clouds" };
     const ponies: Pony[] = [rainbow, { name: "Applejack" }];
 
     for (const pony of ponies) {
-      this.log(isPegasus(pony) ? `${pony.name}: ${pony.wingspan}` : pony.name);
+      this.log(isPegasus(pony) ? `${pony.name}: ${pony.weather}` : pony.name);
     }
 
     const first: Pony = ponies[0];
     assertPegasus(first);
-    this.log(first.wingspan);
+    this.log(first.weather);
 
     try {
       assertPegasus(ponies[1]);

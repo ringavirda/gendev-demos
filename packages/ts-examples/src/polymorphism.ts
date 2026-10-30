@@ -30,31 +30,31 @@ export class PolymorphismExamples extends ExamplesBase {
     }
 
     const fliers: Flier[] = [
-      new Pegasus("Rainbow"),
-      new Alicorn("Twilight"),
+      new Pegasus("Rainbow Dash"),
+      new Alicorn("Twilight Sparkle"),
       new Dragon("Spike"),
-      new Flier("Derpy"),
+      new Flier("Fluttershy"),
     ];
 
     for (const flier of fliers) this.log(flier.fly());
   }
 
   exampleOverloads() {
-    function describe(value: string): string;
-    function describe(value: number, unit: string): string;
-    function describe(value: string | number, unit?: string) {
-      return typeof value === "string" ? value : `${value} ${unit}`;
+    function describe(name: string): string;
+    function describe(name: string, surname: string): string;
+    function describe(name: string, surname?: string) {
+      return surname ? `${surname} ${name}` : name;
     }
 
-    this.log(describe("Twilight"));
-    this.log(describe(12, "points"));
-    // @ts-expect-error: no signature takes two strings
-    this.log(describe("Twilight", "Sparkle"));
+    this.log(describe("Celestia"));
+    this.log(describe("Sparkle", "Twilight"));
+    // @ts-expect-error: no signature takes three strings
+    this.log(describe("Sparkle", "Twilight", "Princess"));
   }
 
   exampleGenerics() {
     interface Pegasus {
-      wingspan: number;
+      weather: string;
     }
 
     interface Unicorn {
@@ -63,10 +63,10 @@ export class PolymorphismExamples extends ExamplesBase {
 
     const last = <T>(items: readonly T[]) => items[items.length - 1];
 
-    const pegasus: Pegasus = last([{ wingspan: 2 }, { wingspan: 3 }]);
-    const unicorn: Unicorn = last([{ spell: "light" }, { spell: "teleport" }]);
+    const pegasus: Pegasus = last([{ weather: "rain" }, { weather: "snow" }]);
+    const unicorn: Unicorn = last([{ spell: "levitation" }, { spell: "teleport" }]);
 
-    this.log(pegasus.wingspan);
+    this.log(pegasus.weather);
     this.log(unicorn.spell);
   }
 

@@ -45,7 +45,7 @@ export class DecoratorsExamples extends ExamplesBase {
       }
     }
 
-    this.log(new Herald().announce("Twilight", "Princess"));
+    this.log(new Herald().announce("Twilight Sparkle", "Princess"));
   }
 
   exampleEvaluationOrder(): void {
@@ -165,17 +165,17 @@ export class DecoratorsExamples extends ExamplesBase {
       @validate
       register(
         @required("name") name?: string,
-        age?: number,
-        @required("house") house?: string,
+        element?: string,
+        @required("home") home?: string,
       ): string {
-        return `${name} (${age}) of ${house}`;
+        return `${name} (${element}) of ${home}`;
       }
     }
 
     const registry = new Registry();
-    this.log(registry.register("Twilight", 24, "Library"));
+    this.log(registry.register("Twilight", "Magic", "Golden Oak Library"));
     try {
-      registry.register("Rarity", 25);
+      registry.register("Rarity", "Generosity");
     } catch (error) {
       this.log(String(error));
     }

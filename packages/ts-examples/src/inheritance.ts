@@ -14,18 +14,18 @@ export class InheritanceExamples extends ExamplesBase {
     class Pegasus extends Pony {
       constructor(
         name: string,
-        private wingspan: number,
+        private move: string,
       ) {
         super(name);
       }
 
       override greet() {
-        return `${super.greet()} and spreads ${this.wingspan} m of wings`;
+        return `${super.greet()} and does a ${this.move}`;
       }
     }
 
     this.log(new Pony("Applejack").greet());
-    this.log(new Pegasus("Rainbow", 2).greet());
+    this.log(new Pegasus("Rainbow Dash", "Sonic Rainboom").greet());
   }
 
   exampleSingleParent() {
@@ -75,7 +75,7 @@ export class InheritanceExamples extends ExamplesBase {
       }
     }
 
-    const alicorn = new Alicorn("Twilight");
+    const alicorn = new Alicorn("Twilight Sparkle");
     const flier: Flier = alicorn;
     const caster: Caster = alicorn;
 
@@ -134,7 +134,7 @@ export class InheritanceExamples extends ExamplesBase {
       }
     }
 
-    const alicorn = new Alicorn("Twilight");
+    const alicorn = new Alicorn("Twilight Sparkle");
 
     this.log(alicorn.fly());
     this.log(alicorn.cast());

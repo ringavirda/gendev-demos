@@ -7,7 +7,7 @@ export class LinkedListExamples extends ExamplesBase {
   exampleBuild(): void {
     const list = new LinkedList<string>();
 
-    list.addLast("Twilight");
+    list.addLast("Twilight Sparkle");
     list.addLast("Rarity");
     list.addFirst("Celestia");
     this.log(`after adding: ${[...list].join(", ")}`);
@@ -37,7 +37,7 @@ export class LinkedListExamples extends ExamplesBase {
   }
 
   exampleIteration(): void {
-    const list = new LinkedList(["Twilight", "Rarity", "Fluttershy"]);
+    const list = new LinkedList(["Twilight Sparkle", "Rarity", "Fluttershy"]);
 
     for (const name of list) {
       this.log(`for...of: ${name}`);
@@ -57,7 +57,7 @@ export class LinkedListExamples extends ExamplesBase {
     const copy = original.clone();
 
     copy.addLast("Pinkie Pie");
-    original.set(0, "Applejack Apple");
+    original.set(0, "Fluttershy");
 
     this.log(`original: ${[...original].join(", ")}`);
     this.log(`copy: ${[...copy].join(", ")}`);

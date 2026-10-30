@@ -1,10 +1,10 @@
 import { ExamplesBase, registerExamples } from "@gendev/example-runner";
 
-type Kind = "pegasus" | "unicorn" | "earth";
+type Kind = "pegasus" | "unicorn" | "alicorn" | "earth";
 
 const ponies: readonly { name: string; kind: Kind }[] = [
-  { name: "Rainbow", kind: "pegasus" },
-  { name: "Twilight", kind: "unicorn" },
+  { name: "Rainbow Dash", kind: "pegasus" },
+  { name: "Twilight Sparkle", kind: "alicorn" },
   { name: "Applejack", kind: "earth" },
   { name: "Fluttershy", kind: "pegasus" },
 ];
@@ -15,7 +15,7 @@ export class ParadigmsExamples extends ExamplesBase {
     const fliers: string[] = [];
 
     for (const pony of ponies) {
-      if (pony.kind === "pegasus") fliers.push(pony.name);
+      if (pony.kind === "pegasus" || pony.kind === "alicorn") fliers.push(pony.name);
     }
 
     this.log(fliers.join(", "));
@@ -39,13 +39,24 @@ export class ParadigmsExamples extends ExamplesBase {
       }
     }
 
+    class Alicorn extends Pony {
+      canFly() {
+        return true;
+      }
+    }
+
     class EarthPony extends Pony {
       canFly() {
         return false;
       }
     }
 
-    const kinds = { pegasus: Pegasus, unicorn: Unicorn, earth: EarthPony };
+    const kinds = {
+      pegasus: Pegasus,
+      unicorn: Unicorn,
+      alicorn: Alicorn,
+      earth: EarthPony,
+    };
     const herd = ponies.map(({ name, kind }) => new kinds[kind](name));
 
     this.log(
@@ -57,9 +68,10 @@ export class ParadigmsExamples extends ExamplesBase {
   }
 
   exampleFunctional() {
-    const isPegasus = (pony: { kind: Kind }) => pony.kind === "pegasus";
+    const canFly = (pony: { kind: Kind }) =>
+      pony.kind === "pegasus" || pony.kind === "alicorn";
     const nameOf = (pony: { name: string }) => pony.name;
 
-    this.log(ponies.filter(isPegasus).map(nameOf).join(", "));
+    this.log(ponies.filter(canFly).map(nameOf).join(", "));
   }
 }

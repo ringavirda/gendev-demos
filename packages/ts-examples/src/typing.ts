@@ -8,10 +8,10 @@ import {
 export class TypingExamples extends ExamplesBase {
   exampleInference() {
     const powerRank = 12;
-    const surname: string = "Sparkle";
+    const name: string = "Sparkle";
     const ranks = [powerRank];
 
-    this.log(`${surname}: ${powerRank} is a ${typeof powerRank}`);
+    this.log(`${name}: ${powerRank} is a ${typeof powerRank}`);
 
     // @ts-expect-error: ranks was inferred as number[]
     ranks.push("thirteen");
@@ -30,7 +30,7 @@ export class TypingExamples extends ExamplesBase {
       powerRank: number;
     };
 
-    const twilight: Princess = { name: "Twilight", powerRank: 12 };
+    const twilight: Princess = { name: "Sparkle", powerRank: 12 };
     const cadance: Alicorn = { name: "Cadance", powerRank: 10 };
     this.log([twilight, cadance]);
 
@@ -103,7 +103,7 @@ export class TypingExamples extends ExamplesBase {
       day: "Celestia",
       night: "Luna",
       love: "Cadance",
-      friendship: "Twilight",
+      friendship: "Twilight Sparkle",
     } as const;
 
     type Aspects = keyof typeof princessesAsConst;

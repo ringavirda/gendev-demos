@@ -12,12 +12,12 @@ export class TypeLevelExamples extends ExamplesBase {
     type MyPartial<T> = { [K in keyof T]?: T[K] };
     type MyReadonly<T> = { readonly [K in keyof T]: T[K] };
 
-    const draft: MyPartial<Princess> = { name: "Twilight" };
+    const draft: MyPartial<Princess> = { name: "Sparkle" };
     this.log(draft);
 
     const twilight: MyReadonly<Princess> = {
-      name: "Twilight",
-      surname: "Sparkle",
+      name: "Sparkle",
+      surname: "Twilight",
       powerRank: 100,
     };
     this.log(twilight);
@@ -38,8 +38,8 @@ export class TypeLevelExamples extends ExamplesBase {
     };
 
     const getters: Getters<Princess> = {
-      getName: () => "Twilight",
-      getSurname: () => "Sparkle",
+      getName: () => "Sparkle",
+      getSurname: () => "Twilight",
       getPowerRank: () => 12,
     };
     this.log(getters.getName());
@@ -94,12 +94,12 @@ export class TypeLevelExamples extends ExamplesBase {
       day: "Celestia";
       night: "Luna";
       love: "Cadance";
-      friendship: "Twilight";
+      friendship: "Twilight Sparkle";
     };
 
     type GetPrincessMeta<T extends keyof Princesses> = Princesses[T];
 
-    const friendship: GetPrincessMeta<"friendship"> = "Twilight";
+    const friendship: GetPrincessMeta<"friendship"> = "Twilight Sparkle";
     const night: GetPrincessMeta<"night"> = "Luna";
     this.log([friendship, night]);
 

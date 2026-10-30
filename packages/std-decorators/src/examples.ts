@@ -68,29 +68,29 @@ export class StdDecoratorExamples extends ExamplesBase {
       }
     }
 
-    this.log(new Pony().greet("Twilight"));
+    this.log(new Pony().greet("Twilight Sparkle"));
   }
 
   exampleField() {
     class Pony {
       @labelled
-      name = "Twilight";
+      name = "Twilight Sparkle";
     }
 
     this.log(new Pony().name);
   }
 
   exampleAccessor() {
-    class Pony {
+    class Wallet {
       @positive
-      accessor age = 1;
+      accessor bits = 1;
     }
 
-    const pony = new Pony();
-    pony.age = 5;
-    this.log(`age: ${pony.age}`);
+    const wallet = new Wallet();
+    wallet.bits = 25;
+    this.log(`bits: ${wallet.bits}`);
     try {
-      pony.age = -1;
+      wallet.bits = -1;
     } catch (error) {
       this.log(String(error));
     }
@@ -98,7 +98,7 @@ export class StdDecoratorExamples extends ExamplesBase {
 
   exampleAddInitializer() {
     class Greeter {
-      name = "Twilight";
+      name = "Twilight Sparkle";
 
       @bound
       greet() {

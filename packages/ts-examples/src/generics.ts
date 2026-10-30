@@ -6,7 +6,7 @@ export class GenericExamples extends ExamplesBase {
     const first = <T>(items: readonly T[]): T | undefined => items[0];
 
     this.log(first([3, 1, 2]));
-    this.log(first(["Twilight", "Spike"]));
+    this.log(first(["Twilight Sparkle", "Spike"]));
     this.log(first<string | number>([]));
   }
 
@@ -20,7 +20,7 @@ export class GenericExamples extends ExamplesBase {
     const pluck = <T, K extends keyof T>(object: T, key: K): T[K] =>
       object[key];
 
-    const twilight = { name: "Twilight", powerRank: 12 };
+    const twilight = { name: "Sparkle", powerRank: 12 };
     this.log(pluck(twilight, "powerRank"));
     // @ts-expect-error: "age" is not a key of twilight
     this.log(pluck(twilight, "age"));
@@ -29,7 +29,7 @@ export class GenericExamples extends ExamplesBase {
       value: T;
     }
 
-    const name: Box = { value: "Twilight" };
+    const name: Box = { value: "Twilight Sparkle" };
     const rank: Box<number> = { value: 12 };
     this.log([name, rank]);
   }
@@ -69,7 +69,7 @@ export class GenericExamples extends ExamplesBase {
       }
     }
 
-    const ponies = new Container("Twilight", "Rarity");
+    const ponies = new Container("Twilight Sparkle", "Rarity");
     ponies.add("Spike");
     ponies.add(0, "Celestia");
     this.log(`${ponies}`);
@@ -92,8 +92,8 @@ export class GenericExamples extends ExamplesBase {
     }
 
     const twilight: Princess = {
-      name: "Twilight",
-      surname: "Sparkle",
+      name: "Sparkle",
+      surname: "Twilight",
       powerRank: 12,
     };
 
@@ -108,9 +108,9 @@ export class GenericExamples extends ExamplesBase {
     const anonymous: Omit<Princess, "name"> = twilight;
     this.log([label.name, anonymous.powerRank]);
 
-    const aspects: Record<"day" | "night", Princess> = {
-      day: { name: "Celestia", surname: "Sol", powerRank: 15 },
-      night: { name: "Luna", surname: "Selene", powerRank: 14 },
+    const aspects: Record<"day" | "night", Omit<Princess, "surname">> = {
+      day: { name: "Celestia", powerRank: 15 },
+      night: { name: "Luna", powerRank: 14 },
     };
     this.log(aspects.night);
 

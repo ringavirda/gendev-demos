@@ -8,13 +8,13 @@ export class ClassExamples extends ExamplesBase {
       surname: string;
 
       constructor(raw: string) {
-        const [name, surname] = raw.trim().split(" ");
+        const [surname, name] = raw.trim().split(" ");
         this.name = name;
         this.surname = surname;
       }
 
       fullName() {
-        return `${this.name} ${this.surname}`;
+        return `${this.surname} ${this.name}`;
       }
     }
 
@@ -47,16 +47,17 @@ export class ClassExamples extends ExamplesBase {
     class Princess {
       constructor(
         readonly name: string,
-        public surname: string,
+        readonly surname: string,
+        public title: string,
       ) {}
     }
 
-    const princess = new Princess("Twilight", "Sparkle");
+    const princess = new Princess("Sparkle", "Twilight", "Student");
 
     // @ts-expect-error: name is readonly
-    princess.name = "Cadance";
-    princess.surname = "Velvet";
-    this.log(princess.surname);
+    princess.name = "Twily";
+    princess.title = "Princess";
+    this.log(princess.title);
     this.log(`name after the readonly assignment: ${princess.name}`);
   }
 
@@ -69,8 +70,8 @@ export class ClassExamples extends ExamplesBase {
       }
 
       set rank(value: number) {
-        if (value < 1 || value > 12) {
-          throw new RangeError(`Rank ${value} is outside 1..12`);
+        if (value < 0) {
+          throw new RangeError(`Rank ${value} is negative`);
         }
         this.#rank = value;
       }
@@ -81,33 +82,33 @@ export class ClassExamples extends ExamplesBase {
     this.log(princess.rank);
 
     try {
-      princess.rank = 13;
+      princess.rank = -1;
     } catch (error) {
       this.log(String(error));
     }
   }
 
   exampleStatic() {
-    class Princess {
+    class Pony {
       static count = 0;
 
       static fromString(raw: string) {
-        const [name, surname] = raw.split(" ");
-        return new Princess(name, surname);
+        const [surname, name] = raw.split(" ");
+        return new Pony(name, surname);
       }
 
       constructor(
         readonly name: string,
         readonly surname: string,
       ) {
-        Princess.count++;
+        Pony.count++;
       }
     }
 
-    new Princess("Celestia", "Solaris");
-    const twilight = Princess.fromString("Twilight Sparkle");
+    new Pony("Pinkie", "Pie");
+    const twilight = Pony.fromString("Twilight Sparkle");
 
     this.log(twilight);
-    this.log(`created: ${Princess.count}`);
+    this.log(`created: ${Pony.count}`);
   }
 }
