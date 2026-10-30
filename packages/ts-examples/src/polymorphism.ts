@@ -3,25 +3,28 @@ import { ExamplesBase, registerExamples } from "@gendev/example-runner";
 @registerExamples()
 export class PolymorphismExamples extends ExamplesBase {
   exampleOverriding() {
-    abstract class Flier {
+    class Flier {
       constructor(protected name: string) {}
-      abstract fly(): string;
+
+      fly() {
+        return `${this.name} flaps`;
+      }
     }
 
     class Pegasus extends Flier {
-      fly() {
+      override fly() {
         return `${this.name} flaps her wings`;
       }
     }
 
     class Alicorn extends Flier {
-      fly() {
+      override fly() {
         return `${this.name} glides on magic`;
       }
     }
 
     class Dragon extends Flier {
-      fly() {
+      override fly() {
         return `${this.name} soars on hot air`;
       }
     }
@@ -30,6 +33,7 @@ export class PolymorphismExamples extends ExamplesBase {
       new Pegasus("Rainbow"),
       new Alicorn("Twilight"),
       new Dragon("Spike"),
+      new Flier("Pinkie"),
     ];
 
     for (const flier of fliers) this.log(flier.fly());

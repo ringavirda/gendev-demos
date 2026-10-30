@@ -74,8 +74,12 @@ export class NarrowingExamples extends ExamplesBase {
     }
 
     const strict: unknown = JSON.parse(text);
-    // @ts-expect-error: unknown has no properties until it is narrowed
-    this.log(strict.name);
+    try {
+      // @ts-expect-error: unknown has no properties until it is narrowed
+      this.log(strict.friend.length);
+    } catch (error) {
+      this.log(String(error));
+    }
 
     if (typeof strict === "object" && strict !== null && "name" in strict) {
       this.log(strict.name);
@@ -97,18 +101,16 @@ export class NarrowingExamples extends ExamplesBase {
       if (!isPegasus(pony)) throw new TypeError(`${pony.name} has no wings`);
     }
 
-    const ponies: Pony[] = [
-      { name: "Rainbow", wingspan: 2 } as Pegasus,
-      { name: "Applejack" },
-    ];
+    const rainbow: Pegasus = { name: "Rainbow", wingspan: 2 };
+    const ponies: Pony[] = [rainbow, { name: "Applejack" }];
 
     for (const pony of ponies) {
       this.log(isPegasus(pony) ? `${pony.name}: ${pony.wingspan}` : pony.name);
     }
 
-    const rainbow: Pony = ponies[0];
-    assertPegasus(rainbow);
-    this.log(rainbow.wingspan);
+    const first: Pony = ponies[0];
+    assertPegasus(first);
+    this.log(first.wingspan);
 
     try {
       assertPegasus(ponies[1]);

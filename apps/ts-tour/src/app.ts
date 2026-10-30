@@ -59,8 +59,10 @@ if (positionals.length === 0) {
     console.error(`Unknown topic: ${unknown}\n${usage()}`);
     process.exit(1);
   }
-  const chosen = positionals.flatMap((p) =>
-    p === "all" ? Object.values(topics) : isTopic(p) ? [topics[p]] : [],
-  );
+  const chosen: ExampleClass[] = [];
+  for (const p of positionals) {
+    if (p === "all") chosen.push(...Object.values(topics));
+    else if (isTopic(p)) chosen.push(topics[p]);
+  }
   if (!runExamples(chosen)) process.exitCode = 1;
 }

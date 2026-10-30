@@ -46,10 +46,10 @@ export class InheritanceExamples extends ExamplesBase {
 
     const alicorn = new Alicorn();
 
-    this.log(alicorn.fly());
+    this.log(`alicorn.fly: ${alicorn.fly()}`);
     // @ts-expect-error: Alicorn has one parent and cast lives on Unicorn
-    this.log(alicorn.cast);
-    this.log(new Unicorn().cast());
+    this.log(`alicorn.cast at runtime: ${alicorn.cast}`);
+    this.log(`unicorn.cast: ${new Unicorn().cast()}`);
   }
 
   exampleInterfaces() {
@@ -94,7 +94,7 @@ export class InheritanceExamples extends ExamplesBase {
       }
     }
 
-    class Pinkie extends Pony {
+    class EarthPony extends Pony {
       speak() {
         return "Let us party!";
       }
@@ -103,13 +103,13 @@ export class InheritanceExamples extends ExamplesBase {
     // @ts-expect-error: an abstract class cannot be instantiated
     new Pony("Nobody");
 
-    this.log(new Pinkie("Pinkie").introduce());
+    this.log(new EarthPony("Pinkie").introduce());
   }
 
   exampleComposition() {
     class Wings {
       flap() {
-        return "flaps";
+        return "flaps her wings";
       }
     }
 
@@ -123,16 +123,18 @@ export class InheritanceExamples extends ExamplesBase {
       private wings = new Wings();
       private horn = new Horn();
 
+      constructor(private name: string) {}
+
       fly() {
-        return this.wings.flap();
+        return `${this.name} ${this.wings.flap()}`;
       }
 
       cast() {
-        return this.horn.glow();
+        return `${this.name}'s horn ${this.horn.glow()}`;
       }
     }
 
-    const alicorn = new Alicorn();
+    const alicorn = new Alicorn("Twilight");
 
     this.log(alicorn.fly());
     this.log(alicorn.cast());

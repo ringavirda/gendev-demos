@@ -1,3 +1,4 @@
+import "./metadata.js";
 import { ExamplesBase, registerExamples } from "@gendev/example-runner";
 
 function shout<This, Args extends unknown[]>(

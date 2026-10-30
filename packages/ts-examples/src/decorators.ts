@@ -128,14 +128,14 @@ export class DecoratorsExamples extends ExamplesBase {
   exampleMarkAndWrap(): void {
     const requiredKey = Symbol("required");
 
-    interface Required {
+    interface RequiredMark {
       index: number;
       label: string;
     }
 
     const required = (label: string) => {
       return (target: object, key: string | symbol, index: number): void => {
-        const marks: Required[] =
+        const marks: RequiredMark[] =
           Reflect.getOwnMetadata(requiredKey, target, key) ?? [];
         marks.push({ index, label });
         Reflect.defineMetadata(requiredKey, marks, target, key);
@@ -150,7 +150,7 @@ export class DecoratorsExamples extends ExamplesBase {
       const original = descriptor.value;
 
       descriptor.value = function (this: unknown, ...args: unknown[]) {
-        const marks: Required[] =
+        const marks: RequiredMark[] =
           Reflect.getOwnMetadata(requiredKey, target, key) ?? [];
         for (const { index, label } of marks) {
           if (args[index] === undefined) {

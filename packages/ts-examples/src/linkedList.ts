@@ -82,18 +82,17 @@ export class LinkedList<T> implements Iterable<T> {
     if (!Number.isInteger(index) || index < 0 || index > this.count) {
       throw new RangeError(`Index ${index} is out of range`);
     }
+    const next = index === this.count ? undefined : this.nodeAt(index);
     for (const value of values) {
-      if (index === this.count) {
+      if (!next) {
         this.addLast(value);
       } else {
-        const next = this.nodeAt(index)!;
         const node = new ListNode(value, next.prev, next);
         if (next.prev) next.prev.next = node;
         else this.head = node;
         next.prev = node;
         this.count++;
       }
-      index++;
     }
   }
 

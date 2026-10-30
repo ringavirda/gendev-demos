@@ -17,7 +17,7 @@ export class TypeLevelExamples extends ExamplesBase {
 
     const celestia: MyReadonly<Princess> = {
       name: "Celestia",
-      surname: "Sunbutt",
+      surname: "Sparkle",
       powerRank: 100,
     };
     this.log(celestia);
@@ -104,7 +104,6 @@ export class TypeLevelExamples extends ExamplesBase {
     this.log([friendship, night]);
 
     // @ts-expect-error: "dawn" is not a key of Princesses
-    const dawn: GetPrincessMeta<"dawn"> = "Celestia";
-    this.log(dawn);
+    void ("Celestia" as GetPrincessMeta<"dawn">);
   }
 }

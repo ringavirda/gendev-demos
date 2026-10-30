@@ -2,7 +2,7 @@
 
 Standard (TC39) decorators in TypeScript, as a small library built on its own:
 this package has neither `experimentalDecorators` nor `emitDecoratorMetadata`.
-The rest of the workspace uses the legacy form; compare the two.
+The other packages that use decorators use the legacy form; compare the two.
 
 - `package.json`: `exports` points `types` and `default` at `dist/`, `files`
   publishes only `dist`, and `@gendev/example-runner` is a `workspace:*`

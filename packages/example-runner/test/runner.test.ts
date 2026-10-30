@@ -141,4 +141,41 @@ describe("runner", () => {
     runExamples([First, Second]);
     expect(lines[lines.indexOf("Second: 1 example") - 1]).toBe("");
   });
+
+  it("uses one instance for all examples of a class", () => {
+    class Demo extends ExamplesBase {
+      seen = "";
+      exampleSet(): void {
+        this.seen = "kept";
+      }
+      exampleRead(): void {
+        this.log(this.seen);
+      }
+    }
+    registerExamples()(Demo);
+
+    runExamples([Demo]);
+    expect(lines).toContain(" | kept");
+  });
+
+  it("reports a throwing constructor and runs the next class", () => {
+    class Broken extends ExamplesBase {
+      constructor() {
+        super();
+        throw new Error("no instance");
+      }
+      exampleOne(): void {}
+    }
+    class Fine extends ExamplesBase {
+      exampleTwo(): void {
+        this.log("two");
+      }
+    }
+    registerExamples()(Broken);
+    registerExamples()(Fine);
+
+    expect(runExamples([Broken, Fine])).toBe(false);
+    expect(lines).toContain(" ! Error: no instance");
+    expect(lines).toContain(" | two");
+  });
 });

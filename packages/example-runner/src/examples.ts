@@ -74,9 +74,10 @@ export function getExamples(
 /**
  * Runs every example of every class, one instance per class, and prints a
  * header per class and a title per example. An example that throws is reported
- * and the next one runs.
+ * and the next one runs; a class whose constructor throws is reported and the
+ * next class runs.
  * @param classes Classes decorated with `registerExamples`.
- * @returns `true` when no example threw.
+ * @returns `true` when no constructor and no example threw.
  */
 export function runExamples(classes: readonly ExampleClass[]): boolean {
   let ok = true;
@@ -89,12 +90,20 @@ export function runExamples(classes: readonly ExampleClass[]): boolean {
     }
     const count = `${examples.length} ${examples.length === 1 ? "example" : "examples"}`;
     console.log(chalk.green(`${cls.name}: ${count}`));
-    const instance = new cls();
+    let instance: ExamplesBase;
+    try {
+      instance = new cls();
+    } catch (error) {
+      ok = false;
+      console.log(chalk.red(` ! ${String(error)}`));
+      return;
+    }
     for (const { key, title } of examples) {
       console.log("");
       console.log(chalk.bold(title));
       try {
-        (instance as unknown as Record<string, () => void>)[key]();
+        const run: unknown = Reflect.get(instance, key);
+        if (typeof run === "function") run.call(instance);
       } catch (error) {
         ok = false;
         console.log(chalk.red(` ! ${String(error)}`));

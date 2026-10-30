@@ -55,8 +55,9 @@ export class ClassExamples extends ExamplesBase {
 
     // @ts-expect-error: name is readonly
     princess.name = "Cadance";
-    princess.surname = "Sparkle";
-    this.log(princess);
+    princess.surname = "Velvet";
+    this.log(princess.surname);
+    this.log(`name after the readonly assignment: ${princess.name}`);
   }
 
   exampleAccessors() {
