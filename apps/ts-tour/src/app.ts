@@ -1,6 +1,6 @@
 import { parseArgs } from "node:util";
 
-import { runExamples } from "@gendev/example-runner";
+import { runExamples, type ExampleClass } from "@gendev/example-runner";
 import {
   ClassExamples,
   DecoratorsExamples,
@@ -15,9 +15,15 @@ const topics = {
   generics: GenericExamples,
   decorators: DecoratorsExamples,
   "linked-list": LinkedListExamples,
-};
+} satisfies Record<string, ExampleClass>;
+
+type Topic = keyof typeof topics;
 
 const names = [...Object.keys(topics), "all"];
+
+function isTopic(name: string): name is Topic {
+  return Object.hasOwn(topics, name);
+}
 
 function usage(): string {
   return `Usage: pnpm --filter @gendev/ts-tour start <topic>...\nTopics:\n${names
@@ -36,13 +42,13 @@ try {
 if (positionals.length === 0) {
   console.log(usage());
 } else {
-  const unknown = positionals.find((p) => !names.includes(p));
+  const unknown = positionals.find((p) => p !== "all" && !isTopic(p));
   if (unknown !== undefined) {
     console.error(`Unknown topic: ${unknown}\n${usage()}`);
     process.exit(1);
   }
   const chosen = positionals.flatMap((p) =>
-    p === "all" ? Object.values(topics) : [topics[p as keyof typeof topics]],
+    p === "all" ? Object.values(topics) : isTopic(p) ? [topics[p]] : [],
   );
-  runExamples(chosen);
+  if (!runExamples(chosen)) process.exitCode = 1;
 }

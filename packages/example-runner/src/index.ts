@@ -1,3 +1,8 @@
-export type { Examples } from "./types.js";
+export type { Example, ExampleClass } from "./types.js";
 export { ExamplesBase } from "./types.js";
-export { exampleRun, registerExamples, runExamples } from "./examples.js";
+export {
+  example,
+  getExamples,
+  registerExamples,
+  runExamples,
+} from "./examples.js";
