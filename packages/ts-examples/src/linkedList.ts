@@ -38,7 +38,7 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * @param index Position of the value, from 0 to `size - 1`.
-   * @returns The value, or `undefined` when the index is out of range.
+   * @returns The value, or `undefined` when the index is not an integer from 0 to `size - 1`.
    */
   at(index: number): T | undefined {
     return this.nodeAt(index)?.value;
@@ -76,7 +76,7 @@ export class LinkedList<T> implements Iterable<T> {
   /**
    * @param index Position of the first inserted value, from 0 to `size`.
    * @param values Values to insert, kept in the given order.
-   * @throws {RangeError} When the index is outside 0 to `size`.
+   * @throws {RangeError} When the index is not an integer from 0 to `size`.
    */
   insert(index: number, ...values: T[]): void {
     if (!Number.isInteger(index) || index < 0 || index > this.count) {
@@ -100,7 +100,7 @@ export class LinkedList<T> implements Iterable<T> {
   /**
    * @param index Position of the value to replace, from 0 to `size - 1`.
    * @param value The new value.
-   * @throws {RangeError} When the index is out of range.
+   * @throws {RangeError} When the index is not an integer from 0 to `size - 1`.
    */
   set(index: number, value: T): void {
     const node = this.nodeAt(index);
@@ -110,7 +110,7 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * @param index Position of the value to remove, from 0 to `size - 1`.
-   * @returns The removed value, or `undefined` when the index is out of range.
+   * @returns The removed value, or `undefined` when the index is not an integer from 0 to `size - 1`.
    */
   removeAt(index: number): T | undefined {
     const node = this.nodeAt(index);
@@ -144,6 +144,7 @@ export class LinkedList<T> implements Iterable<T> {
     return new LinkedList(this);
   }
 
+  /** @returns The values from first to last; changing the list while iterating is not supported. */
   *[Symbol.iterator](): Iterator<T> {
     for (let node = this.head; node; node = node.next) yield node.value;
   }

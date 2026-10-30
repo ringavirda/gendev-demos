@@ -24,6 +24,17 @@ describe("LinkedList", () => {
     expect(list.last()).toBe("c");
   });
 
+  it("keeps the back links when adding first", () => {
+    const list = new LinkedList<string>();
+    list.addFirst("b");
+    expect(list.last()).toBe("b");
+    list.addFirst("a");
+    list.removeAt(1);
+
+    expect(list.last()).toBe("a");
+    expect([...list]).toEqual(["a"]);
+  });
+
   it("inserts at the start, middle and end", () => {
     const list = new LinkedList<number>([2, 4]);
     list.insert(0, 1);
@@ -34,6 +45,7 @@ describe("LinkedList", () => {
     expect(list.size).toBe(5);
     expect(list.last()).toBe(5);
     expect(() => list.insert(-1, 0)).toThrow(RangeError);
+    expect(() => list.insert(1.5, 0)).toThrow(RangeError);
     expect(() => list.insert(list.size + 1, 0)).toThrow(RangeError);
   });
 
@@ -69,6 +81,7 @@ describe("LinkedList", () => {
     expect(list.at(1)).toBe(2);
     expect(list.at(2)).toBeUndefined();
     expect(list.at(-1)).toBeUndefined();
+    expect(list.at(0.5)).toBeUndefined();
   });
 
   it("sets by index", () => {
