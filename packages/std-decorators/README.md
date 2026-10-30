@@ -4,6 +4,14 @@ Standard (TC39) decorators in TypeScript, as a small library built on its own:
 this package has neither `experimentalDecorators` nor `emitDecoratorMetadata`.
 The rest of the workspace uses the legacy form; compare the two.
 
+- `package.json`: `exports` points `types` and `default` at `dist/`, `files`
+  publishes only `dist`, and `@gendev/example-runner` is a `workspace:*`
+  dependency.
+- `tsconfig.json`: extends the base config, emits `declaration` and
+  `declarationMap` files, and adds `esnext.decorators` to `lib`; without it
+  `context.metadata` does not type-check.
+- `dist/`: what `tsc` writes from `src/`: `.js`, `.d.ts` and `.d.ts.map` files.
+  It is not committed.
 - `src/metadata.ts`: defines `Symbol.metadata` when Node lacks it. Decorator
   metadata is stored under that symbol.
 - `src/examples.ts`: `StdDecoratorExamples`, five examples: a method decorator
@@ -18,6 +26,9 @@ Standard decorators have no parameter decorators. A decorator receives
 `(value, context)`, so the runner's `@example` (a legacy
 `(target, key, descriptor)` decorator) cannot be used here; the examples are
 found by their `example` name prefix.
+
+Build the package before using it, since `exports` points into `dist/`:
+`pnpm --filter <app>... build`.
 
 Use from another workspace package: add `"@gendev/std-decorators":
 "workspace:*"`, then `import { StdDecoratorExamples } from

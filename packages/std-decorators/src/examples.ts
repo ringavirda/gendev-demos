@@ -2,9 +2,13 @@ import { ExamplesBase, registerExamples } from "@gendev/example-runner";
 
 function shout<This, Args extends unknown[]>(
   value: (this: This, ...args: Args) => string,
+  context: ClassMethodDecoratorContext<
+    This,
+    (this: This, ...args: Args) => string
+  >,
 ) {
   return function (this: This, ...args: Args) {
-    return value.call(this, ...args).toUpperCase();
+    return `${String(context.name)}: ${value.call(this, ...args).toUpperCase()}`;
   };
 }
 
