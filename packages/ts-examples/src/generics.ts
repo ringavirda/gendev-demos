@@ -60,7 +60,8 @@ export class GenericExamples extends ExamplesBase {
       }
 
       remove(item: T): boolean {
-        return this.removeAt(this.items.indexOf(item));
+        const index = this.items.indexOf(item);
+        return this.removeAt(index);
       }
 
       toString(): string {
