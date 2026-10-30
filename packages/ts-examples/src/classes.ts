@@ -1,138 +1,112 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
 import { ExamplesBase, registerExamples } from "@gendev/example-runner";
 
 @registerExamples()
 export class ClassExamples extends ExamplesBase {
-  exampleConstructor(): void {
-    const context = this;
-
+  exampleConstructor() {
     class Princess {
-      private _name: string;
-      private _surname: string;
+      name: string;
+      surname: string;
 
       constructor(raw: string) {
-        const parts = raw.trim().split(" ");
-        this._surname = parts[0];
-        this._name = parts[1];
-        context.log("Princess was created.");
+        const [name, surname] = raw.trim().split(" ");
+        this.name = name;
+        this.surname = surname;
       }
 
-      public fullName(): string {
-        return `${this._surname} ${this._name}`;
+      fullName() {
+        return `${this.name} ${this.surname}`;
       }
     }
 
-    // Create instance.
     const princess = new Princess("Twilight Sparkle");
 
-    this.log(`instance: ${princess}`);
-    this.log(`json: ${JSON.stringify(princess)}`);
-    this.log(`fullName: ${princess.fullName()}`);
+    this.log(princess);
+    this.log(princess.fullName());
   }
 
-  exampleInheritance(): void {
-    const context = this;
+  exampleAccessModifiers() {
+    class Princess {
+      private rank = 12;
+      protected element = "magic";
+      #secret = "friendship";
 
-    class Pony {
-      protected _name: string;
-
-      constructor(name: string) {
-        this._name = name;
-      }
-
-      public run(): void {
-        context.log(`${this._name}: she runs!`);
+      reveal() {
+        return `${this.rank} ${this.element} ${this.#secret}`;
       }
     }
 
-    class Pegasus extends Pony {
-      constructor(name: string) {
-        super(name);
-      }
+    const princess = new Princess();
 
-      public fly(): void {
-        context.log(`${this._name}: she flies!`);
-      }
-    }
-
-    const pinkie = new Pony("Pinkie Pie");
-    const rainbow = new Pegasus("Rainbow Dash");
-
-    pinkie.run();
-
-    rainbow.run();
-    rainbow.fly();
-
-    // No diamond inheritance.
-    this.separator();
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    class Unicorn extends Pony {
-      constructor(name: string) {
-        super(name);
-      }
-
-      public magic(): void {
-        context.log(`${this._name}: she magics!`);
-      }
-    }
-
-    // This is not possible.
-    // class Alicorn extends Pony, Pegasus, Unicorn {}
-
-    // Use interfaces instead.
-
-    interface IFlier {
-      fly(): void;
-    }
-    interface IMagicUser {
-      magic(): void;
-    }
-
-    class Alicorn extends Pony implements IFlier, IMagicUser {
-      constructor(name: string) {
-        super(name);
-      }
-
-      public fly(): void {
-        context.log(`${this._name}: she breaks sound barrier!`);
-      }
-      public magic(): void {
-        context.log(`${this._name}: she is a cheater!`);
-      }
-    }
-
-    const fallenstar = new Alicorn("Fallenstar");
-    fallenstar.run();
-    fallenstar.fly();
-    fallenstar.magic();
+    this.log(princess.reveal());
+    // @ts-expect-error: rank is private to the class
+    this.log(princess.rank);
+    this.log(JSON.stringify(princess));
   }
 
-  examplePolymorphism(): void {
-    const context = this;
-
-    abstract class Flier {
-      constructor(protected _name: string) {}
-      abstract fly(): void;
-      // abstract fly(distance: number): void; // Static poly is not supported.
+  exampleReadonlyAndParameterProperties() {
+    class Princess {
+      constructor(
+        readonly name: string,
+        public surname: string,
+      ) {}
     }
 
-    class Pegasus extends Flier {
-      public override fly(): void {
-        context.log(`${this._name}: she flies fast!`);
+    const princess = new Princess("Twilight", "Sparkle");
+
+    // @ts-expect-error: name is readonly
+    princess.name = "Cadance";
+    princess.surname = "Sparkle";
+    this.log(princess);
+  }
+
+  exampleAccessors() {
+    class Princess {
+      #rank = 1;
+
+      get rank() {
+        return this.#rank;
+      }
+
+      set rank(value: number) {
+        if (value < 1 || value > 12) {
+          throw new RangeError(`Rank ${value} is outside 1..12`);
+        }
+        this.#rank = value;
       }
     }
 
-    class Griffon extends Flier {
-      public override fly(): void {
-        context.log(`${this._name}: she flies with agility!`);
+    const princess = new Princess();
+    princess.rank = 12;
+    this.log(princess.rank);
+
+    try {
+      princess.rank = 13;
+    } catch (error) {
+      this.log(String(error));
+    }
+  }
+
+  exampleStatic() {
+    class Princess {
+      static count = 0;
+
+      static fromString(raw: string) {
+        const [name, surname] = raw.split(" ");
+        return new Princess(name, surname);
+      }
+
+      constructor(
+        readonly name: string,
+        readonly surname: string,
+      ) {
+        Princess.count++;
       }
     }
 
-    const rainbow = new Pegasus("Rainbow Dash");
-    const gabby = new Griffon("Gabriela");
+    new Princess("Celestia", "Solaris");
+    const twilight = Princess.fromString("Twilight Sparkle");
 
-    const fliers: Array<Flier> = [rainbow, gabby];
-    fliers.forEach((fl) => fl.fly());
+    this.log(twilight);
+    this.log(`created: ${Princess.count}`);
   }
 }
