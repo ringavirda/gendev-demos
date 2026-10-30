@@ -1,136 +1,183 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
 import "reflect-metadata";
 import { ExamplesBase, registerExamples } from "@gendev/example-runner";
 
 @registerExamples()
 export class DecoratorsExamples extends ExamplesBase {
-  exampleClassDecorator() {
-    const context = this;
+  exampleClassDecorator(): void {
+    const sealed = (target: new () => object): void => {
+      this.log(`decorator ran for ${target.name}`);
+      Object.seal(target);
+      Object.seal(target.prototype);
+    };
 
-    @classDecorator("Hello from decorator!")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    class Decorated {
-      constructor() {
-        context.log("Decorated initialized.");
+    @sealed
+    class Alicorn {
+      greet(): string {
+        return "an Alicorn greets you";
       }
     }
 
-    function classDecorator<T extends typeof Decorated>(arg: string) {
-      return function (target: T) {
-        context.log(target.toString());
-        context.log(arg);
-      };
-    }
+    this.log("the class is defined, no instance yet");
+    this.log(new Alicorn().greet());
+    this.log(`sealed: ${Object.isSealed(Alicorn)}`);
   }
 
-  exampleMethodDecorator() {
-    const context = this;
+  exampleWrappingMethod(): void {
+    const logged = (log: (line: string) => void) => {
+      return (
+        _target: object,
+        key: string,
+        descriptor: PropertyDescriptor,
+      ): void => {
+        const original = descriptor.value;
 
-    class Decorated {
-      constructor() {
-        context.log("Decorated initialized.");
-      }
-
-      @methodDecorator("Hello from decorator again!")
-      public decorated() {
-        context.log(`decorated was invoked, this: ${this}`);
-      }
-    }
-
-    function methodDecorator<T extends Decorated>(arg: string) {
-      return function (target: T, key: string, desc: PropertyDescriptor) {
-        context.log(arg);
-        context.log(`tgt: ${target}`);
-        context.log(`key: ${key}`);
-        context.log(desc);
-
-        desc.value?.();
-      };
-    }
-  }
-
-  exampleFieldDecorator() {
-    const formatMetadataKey = Symbol("format");
-
-    class Decorated {
-      @format("This was decorated: {}")
-      private _field: string = "hey there!";
-
-      public getFormattedField() {
-        const formatString = getFormat(this, "_field");
-        return formatString.replace("{}", this._field);
-      }
-    }
-
-    function format(formatString: string) {
-      return Reflect.metadata(formatMetadataKey, formatString);
-    }
-
-    function getFormat(target: any, propertyKey: string) {
-      return Reflect.getMetadata(formatMetadataKey, target, propertyKey);
-    }
-
-    const decorated = new Decorated();
-    this.log(decorated.getFormattedField());
-  }
-
-  exampleParamDecorator() {
-    const context = this;
-    const requiredMetadataKey = Symbol("required");
-
-    class Decorated {
-      @validate()
-      public manyArgs(
-        @required() first?: string,
-        second?: number,
-        @required() third?: boolean,
-      ) {
-        context.log(`f: ${first}, s: ${second}, t: ${third}`);
-      }
-    }
-
-    function required() {
-      return function (target: object, key: string | symbol, index: number) {
-        const existingRequiredParameters: number[] =
-          Reflect.getOwnMetadata(requiredMetadataKey, target, key) ?? [];
-        existingRequiredParameters.push(index);
-        Reflect.defineMetadata(
-          requiredMetadataKey,
-          existingRequiredParameters,
-          target,
-          key,
-        );
-      };
-    }
-
-    function validate() {
-      return function (target: any, key: string, desc: PropertyDescriptor) {
-        const method = desc.value;
-
-        desc.value = function (...args: any[]) {
-          const requiredParameters: number[] = Reflect.getOwnMetadata(
-            requiredMetadataKey,
-            target,
-            key,
-          );
-          if (requiredParameters) {
-            for (const parameterIndex of requiredParameters) {
-              if (
-                parameterIndex >= args.length ||
-                args[parameterIndex] === undefined
-              ) {
-                context.log("Missing required argument.");
-                return;
-              }
-            }
-          }
-          return method?.apply(this, args);
+        descriptor.value = function (this: unknown, ...args: unknown[]) {
+          log(`calling ${key}(${args.join(", ")})`);
+          return original.apply(this, args);
         };
       };
+    };
+
+    class Herald {
+      @logged((line) => this.log(line))
+      announce(princess: string, title: string): string {
+        return `${title} ${princess} has arrived`;
+      }
     }
 
-    const decorated = new Decorated();
-    decorated.manyArgs("first", 2, false);
-    decorated.manyArgs("first", 2, undefined);
+    this.log(new Herald().announce("Twilight", "Princess"));
+  }
+
+  exampleEvaluationOrder(): void {
+    const trace = (label: string) => {
+      this.log(`factory ${label}`);
+      return (_target: object, key: string): void => {
+        this.log(`decorator ${label} on ${key}`);
+      };
+    };
+
+    class Spell {
+      @trace("first")
+      @trace("second")
+      cast(): string {
+        return "cast";
+      }
+    }
+
+    this.log(new Spell().cast());
+  }
+
+  exampleMarkingProperty(): void {
+    const formatKey = Symbol("format");
+
+    const format = (template: string) => Reflect.metadata(formatKey, template);
+
+    class Pony {
+      @format("Element of {}")
+      element = "Magic";
+
+      describe(): string {
+        const template: string = Reflect.getMetadata(
+          formatKey,
+          this,
+          "element",
+        );
+        return template.replace("{}", this.element);
+      }
+    }
+
+    this.log(new Pony().describe());
+  }
+
+  exampleDesignMetadata(): void {
+    class Pony {
+      constructor(public name: string) {}
+    }
+
+    const names = (types: readonly { name: string }[]): string =>
+      types.map((type) => type.name).join(", ");
+
+    const inspect = (target: object, key: string): void => {
+      const type = Reflect.getMetadata("design:type", target, key);
+      const params = Reflect.getMetadata("design:paramtypes", target, key);
+      const returns = Reflect.getMetadata("design:returntype", target, key);
+      this.log(`${key}: ${type.name}(${names(params)}) -> ${returns.name}`);
+    };
+
+    const inspectClass = (target: new (...args: never[]) => object): void => {
+      const params = Reflect.getMetadata("design:paramtypes", target);
+      this.log(`${target.name} constructor: (${names(params)})`);
+    };
+
+    @inspectClass
+    class Stable {
+      constructor(
+        public keeper: Pony,
+        public stalls: number,
+      ) {}
+
+      @inspect
+      feed(pony: Pony, hay: number): string {
+        return `${pony.name} ate ${hay} bales`;
+      }
+    }
+
+    this.log(new Stable(new Pony("Applejack"), 4).feed(new Pony("Rarity"), 2));
+  }
+
+  exampleMarkAndWrap(): void {
+    const requiredKey = Symbol("required");
+
+    interface Required {
+      index: number;
+      label: string;
+    }
+
+    const required = (label: string) => {
+      return (target: object, key: string | symbol, index: number): void => {
+        const marks: Required[] =
+          Reflect.getOwnMetadata(requiredKey, target, key) ?? [];
+        marks.push({ index, label });
+        Reflect.defineMetadata(requiredKey, marks, target, key);
+      };
+    };
+
+    const validate = (
+      target: object,
+      key: string,
+      descriptor: PropertyDescriptor,
+    ): void => {
+      const original = descriptor.value;
+
+      descriptor.value = function (this: unknown, ...args: unknown[]) {
+        const marks: Required[] =
+          Reflect.getOwnMetadata(requiredKey, target, key) ?? [];
+        for (const { index, label } of marks) {
+          if (args[index] === undefined) {
+            throw new Error(`Missing required argument: ${label}`);
+          }
+        }
+        return original.apply(this, args);
+      };
+    };
+
+    class Registry {
+      @validate
+      register(
+        @required("name") name?: string,
+        age?: number,
+        @required("house") house?: string,
+      ): string {
+        return `${name} (${age}) of ${house}`;
+      }
+    }
+
+    const registry = new Registry();
+    this.log(registry.register("Twilight", 24, "Library"));
+    try {
+      registry.register("Rarity", 25);
+    } catch (error) {
+      this.log(String(error));
+    }
   }
 }
