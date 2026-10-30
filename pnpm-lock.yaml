@@ -356,6 +356,22 @@ importers:
         specifier: 'catalog:'
         version: 5.0.4(@types/node@24.19.2)(vite@8.3.4(@types/node@24.19.2)(terser@5.44.0))
 
+  packages/std-decorators:
+    dependencies:
+      '@gendev/example-runner':
+        specifier: workspace:*
+        version: link:../example-runner
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      rimraf:
+        specifier: 'catalog:'
+        version: 6.1.3
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/ts-examples:
     dependencies:
       '@gendev/example-runner':
