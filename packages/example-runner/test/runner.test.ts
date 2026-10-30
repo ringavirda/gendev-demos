@@ -111,6 +111,23 @@ describe("runner", () => {
     ]);
   });
 
+  it("prefixes every line and the separator", () => {
+    class Demo extends ExamplesBase {
+      exampleMulti(): void {
+        this.log("a\nb");
+        this.separator();
+      }
+    }
+    registerExamples()(Demo);
+
+    runExamples([Demo]);
+    expect(lines.slice(-3)).toEqual([
+      " | a",
+      " | b",
+      " | ====================",
+    ]);
+  });
+
   it("separates classes with an empty line", () => {
     class First extends ExamplesBase {
       exampleOne(): void {}
