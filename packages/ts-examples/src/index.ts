@@ -1,6 +1,11 @@
+export { TypingExamples } from "./typing.js";
+export { NarrowingExamples } from "./narrowing.js";
+export { GenericExamples } from "./generics.js";
+export { ParadigmsExamples } from "./paradigms.js";
+export { ClassExamples } from "./classes.js";
+export { InheritanceExamples } from "./inheritance.js";
+export { PolymorphismExamples } from "./polymorphism.js";
 export { LinkedListExamples } from "./linkedListExamples.js";
 export { LinkedList } from "./linkedList.js";
-export { ClassExamples } from "./classes.js";
-export { TypingExamples } from "./typing.js";
-export { GenericExamples } from "./generics.js";
 export { DecoratorsExamples } from "./decorators.js";
+export { TypeLevelExamples } from "./typeLevel.js";

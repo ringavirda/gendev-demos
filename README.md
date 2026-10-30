@@ -68,25 +68,26 @@ These examples do the same job in two styles:
 `packages/cli-lib` holds the command line code that `apps/cli-demo` and
 `apps/princess` use.
 
-### App structure, classes and DI
+### TypeScript, OOP and metaprogramming
 
-`packages/ts-examples` has the class and generics examples. `apps/princess`
-is a selector CLI with layers and dependency injection.
+`packages/ts-examples` has the examples, one class per topic, and
+`packages/std-decorators` has the standard decorators. `ts-tour` runs them:
+`typing`, `narrowing`, `generics`, `paradigms`, `classes`, `inheritance`,
+`polymorphism`, `linked-list`, `decorators`, `std-decorators` and `type-level`.
+`packages/example-runner` registers and runs the example classes.
 
-    pnpm --filter @gendev/ts-tour start classes
-    pnpm --filter @gendev/ts-tour start generics
-    pnpm --filter @gendev/princess start
+    pnpm --filter @gendev/ts-tour start narrowing
+    pnpm --filter @gendev/ts-tour start classes inheritance
+    pnpm --filter @gendev/ts-tour start std-decorators
 
 `ts-tour` takes one or more topics and runs them in the order given. `all`
 runs every topic.
 
-### Advanced TypeScript
+### App structure, patterns and DI
 
-`packages/ts-examples` has the decorator examples and `linked-list`, a generic
-linked list. `packages/example-runner` registers and runs the example classes.
+`apps/princess` is a selector CLI with layers and dependency injection.
 
-    pnpm --filter @gendev/ts-tour start decorators
-    pnpm --filter @gendev/ts-tour start linked-list
+    pnpm --filter @gendev/princess start
 
 ## Templates
 

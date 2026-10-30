@@ -89,11 +89,17 @@
       "type": "pickString",
       "description": "Topic",
       "options": [
-        "classes",
         "typing",
+        "narrowing",
         "generics",
-        "decorators",
+        "paradigms",
+        "classes",
+        "inheritance",
+        "polymorphism",
         "linked-list",
+        "decorators",
+        "std-decorators",
+        "type-level",
         "all"
       ],
       "default": "all"

@@ -1,20 +1,32 @@
 import { parseArgs } from "node:util";
 
 import { runExamples, type ExampleClass } from "@gendev/example-runner";
+import { StdDecoratorExamples } from "@gendev/std-decorators";
 import {
   ClassExamples,
   DecoratorsExamples,
   GenericExamples,
+  InheritanceExamples,
   LinkedListExamples,
+  NarrowingExamples,
+  ParadigmsExamples,
+  PolymorphismExamples,
+  TypeLevelExamples,
   TypingExamples,
 } from "@gendev/ts-examples";
 
 const topics = {
-  classes: ClassExamples,
   typing: TypingExamples,
+  narrowing: NarrowingExamples,
   generics: GenericExamples,
-  decorators: DecoratorsExamples,
+  paradigms: ParadigmsExamples,
+  classes: ClassExamples,
+  inheritance: InheritanceExamples,
+  polymorphism: PolymorphismExamples,
   "linked-list": LinkedListExamples,
+  decorators: DecoratorsExamples,
+  "std-decorators": StdDecoratorExamples,
+  "type-level": TypeLevelExamples,
 } satisfies Record<string, ExampleClass>;
 
 type Topic = keyof typeof topics;

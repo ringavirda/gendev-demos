@@ -277,6 +277,9 @@ importers:
       '@gendev/example-runner':
         specifier: workspace:*
         version: link:../../packages/example-runner
+      '@gendev/std-decorators':
+        specifier: workspace:*
+        version: link:../../packages/std-decorators
       '@gendev/ts-examples':
         specifier: workspace:*
         version: link:../../packages/ts-examples

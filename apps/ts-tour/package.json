@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@gendev/example-runner": "workspace:*",
+    "@gendev/std-decorators": "workspace:*",
     "@gendev/ts-examples": "workspace:*"
   },
   "devDependencies": {
