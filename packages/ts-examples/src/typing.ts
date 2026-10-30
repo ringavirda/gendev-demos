@@ -1,71 +1,75 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { ExamplesBase, registerExamples } from "@gendev/example-runner";
+import {
+  ExamplesBase,
+  example,
+  registerExamples,
+} from "@gendev/example-runner";
 
 @registerExamples()
 export class TypingExamples extends ExamplesBase {
-  exampleInterface() {
-    interface Princess {
-      surname: string;
-      name: string;
-      powerRank: number;
-    }
+  exampleInference() {
+    const powerRank = 12;
+    const surname: string = "Sparkle";
+    const ranks = [powerRank];
 
-    const addPrincess = (req: Princess) => {
-      this.log(`Added: ${JSON.stringify(req)}`);
-    };
+    this.log(`${surname}: ${powerRank} is a ${typeof powerRank}`);
 
-    // Compiler will complain if we don't initialize all fields.
-    // addPrincess({
-    //   name: "Sparkle",
-    //   surname: "Twilight",
-    // });
-
-    // Interfaces can be extended.
-    this.separator();
-
-    interface Princess {
-      isAwakened: boolean;
-    }
-
-    addPrincess({
-      name: "Shimmer",
-      surname: "Sunset",
-      powerRank: 12,
-      isAwakened: false,
-    });
+    // @ts-expect-error: ranks was inferred as number[]
+    ranks.push("thirteen");
   }
 
-  exampleType() {
-    type Princess = {
-      surname: string;
+  exampleInterfaceAndType() {
+    interface Pony {
       name: string;
+    }
+
+    interface Princess extends Pony {
+      powerRank: number;
+    }
+
+    type Alicorn = Pony & {
       powerRank: number;
     };
 
-    const addPrincess = (req: Princess) => {
-      this.log(`Added: ${JSON.stringify(req)}`);
+    const twilight: Princess = { name: "Twilight", powerRank: 12 };
+    const cadance: Alicorn = { name: "Cadance", powerRank: 10 };
+    this.log([twilight, cadance]);
+
+    // @ts-expect-error: powerRank is required
+    const spike: Princess = { name: "Spike" };
+    this.log(spike);
+  }
+
+  exampleDeclarationMerging() {
+    interface Princess {
+      name: string;
+    }
+
+    interface Princess {
+      powerRank: number;
+    }
+
+    const describe = (princess: Princess) => {
+      this.log(`${princess.name}: ${princess.powerRank}`);
     };
 
-    // Compiler will complain if we don't initialize all fields.
-    // addPrincess({
-    //   name: "Sparkle",
-    //   surname: "Twilight",
-    // });
+    describe({ name: "Luna", powerRank: 11 });
+    // @ts-expect-error: the merged Princess also requires powerRank
+    describe({ name: "Celestia" });
+  }
 
-    // Types can be combined.
+  exampleLiteralUnions() {
+    type Aspect = "day" | "night";
 
-    type Queen = {
-      name: "Chrysalis";
+    const princesses: Record<Aspect, string> = {
+      day: "Celestia",
+      night: "Luna",
     };
 
-    type Combined = Princess | Queen;
+    const getPrincess = (aspect: Aspect) => princesses[aspect];
 
-    const addPower = (req: Combined) => {
-      this.log(`Added: ${JSON.stringify(req)}`);
-    };
-
-    addPower({ name: "Chrysalis" });
-    // addPower({ name: "Trixie" }); // Compiler will complain.
+    this.log(getPrincess("night"));
+    // @ts-expect-error: "dusk" is not in the union
+    this.log(getPrincess("dusk"));
   }
 
   exampleAsConst() {
@@ -74,32 +78,26 @@ export class TypingExamples extends ExamplesBase {
       night: "Luna",
     };
 
+    const getPrincess = (aspect: "day" | "night") => princesses[aspect];
+
     const aspects = {
       first: "day",
       second: "night",
     };
 
-    const getPrincess = (aspect: "day" | "night") => {
-      return princesses[aspect];
-    };
-
-    this.log(getPrincess("night")); // Will work.
-    // this.log(getPrincess(aspects.first)); // Compiler will complain!
-
-    // Reason:
-    // princesses.destruction = "Fallenstar";
-    // this.log(getPrincess("destruction"));
-    this.separator();
+    // aspects.first = "destruction" would be allowed, so the property is a string.
+    // @ts-expect-error: aspects.first is widened to string
+    this.log(getPrincess(aspects.first));
 
     const aspectsAsConst = {
       first: "day",
       second: "night",
     } as const;
 
-    this.log(getPrincess("night"));
-    this.log(getPrincess(aspectsAsConst.first)); // Works fine.
+    this.log(getPrincess(aspectsAsConst.first));
   }
 
+  @example("keyof typeof")
   exampleTypeofKeyof() {
     const princessesAsConst = {
       day: "Celestia",
@@ -108,32 +106,13 @@ export class TypingExamples extends ExamplesBase {
       friendship: "Twilight",
     } as const;
 
-    // Const is not necessary here but suggested.
     type Aspects = keyof typeof princessesAsConst;
     type Princesses = (typeof princessesAsConst)[Aspects];
 
-    const getPrincessConst = (aspect: Aspects): Princesses => {
-      return princessesAsConst[aspect];
-    };
+    const getPrincess = (aspect: Aspects): Princesses =>
+      princessesAsConst[aspect];
 
-    this.log(getPrincessConst("love"));
-    this.log(getPrincessConst("friendship"));
-  }
-
-  exampleMeta() {
-    type Princesses = {
-      day: "Celestia";
-      night: "Luna";
-      love: "Cadance";
-      friendship: "Twilight";
-    };
-
-    type GetPrincessMeta<T extends keyof Princesses> = Princesses[T];
-
-    const friendship: GetPrincessMeta<"friendship"> = "Twilight";
-    const night: GetPrincessMeta<"night"> = "Luna";
-
-    this.log(friendship);
-    this.log(night);
+    this.log(getPrincess("love"));
+    this.log(getPrincess("friendship"));
   }
 }

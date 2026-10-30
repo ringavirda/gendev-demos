@@ -1,89 +1,118 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
 import { ExamplesBase, registerExamples } from "@gendev/example-runner";
 
 @registerExamples()
 export class GenericExamples extends ExamplesBase {
-  exampleTemplate() {
-    const context = this;
+  exampleFunctions() {
+    const first = <T>(items: T[]): T => items[0];
 
-    class Container<T> {
-      private _internal: Array<T> = [];
-
-      constructor(starter: Array<T>);
-      constructor(starter: T);
-      constructor(...starter: Array<T>);
-      constructor(starter: any) {
-        if (starter instanceof Array) this._internal = starter;
-        else this._internal.push(starter);
-      }
-
-      public get(index: number): T {
-        return this._internal[index];
-      }
-      public add(item: T): void {
-        this._internal.push(item);
-      }
-      public remove(id: T | number): void {
-        let index = id as number;
-        if (!Number.isInteger(id)) {
-          index = this._internal.indexOf(id as T);
-        }
-        this._internal.splice(index, 1);
-      }
-
-      public print(): void {
-        context.log(`[ ${this._internal.join(", ")} ]`);
-      }
-    }
-
-    const cont0 = new Container(0);
-    cont0.add(1);
-    cont0.add(2);
-    cont0.print();
-
-    this.separator();
-
-    const cont1 = new Container(["first", "second"]);
-    cont1.add("third");
-    cont1.remove(1);
-    cont1.print();
-
-    this.separator();
-
-    const cont2 = new Container(...Array(5).keys());
-    this.log(`get(2): ${cont2.get(2)}`);
-    cont2.print();
+    this.log(first([3, 1, 2]));
+    this.log(first(["Twilight", "Spike"]));
+    this.log(first<string | number>([]));
   }
 
-  public exampleConstraints() {
-    const context = this;
+  exampleConstraints() {
+    const longest = <T extends { length: number }>(a: T, b: T): T =>
+      a.length >= b.length ? a : b;
 
-    interface ISomething {
-      some(): void;
+    this.log(longest("Luna", "Celestia"));
+    this.log(longest([1, 2, 3], [4]));
+
+    const pluck = <T, K extends keyof T>(object: T, key: K): T[K] =>
+      object[key];
+
+    const twilight = { name: "Twilight", powerRank: 12 };
+    this.log(pluck(twilight, "powerRank"));
+    // @ts-expect-error: "age" is not a key of twilight
+    this.log(pluck(twilight, "age"));
+
+    interface Box<T = string> {
+      value: T;
     }
 
-    class Constrained<T extends string | ISomething> {
-      public print(stuff: T) {
-        context.log(stuff as unknown as string); // This is a workaround.
+    const name: Box = { value: "Twilight" };
+    const rank: Box<number> = { value: 12 };
+    this.log([name, rank]);
+  }
+
+  exampleContainer() {
+    class Container<T> {
+      private readonly items: T[];
+
+      constructor(...items: T[]) {
+        this.items = items;
+      }
+
+      get(index: number): T {
+        return this.items[index];
+      }
+
+      add(item: T): void;
+      add(index: number, item: T): void;
+      add(...args: [T] | [number, T]): void {
+        if (args.length === 2) this.items.splice(args[0], 0, args[1]);
+        else this.items.push(args[0]);
+      }
+
+      removeAt(index: number): void {
+        this.items.splice(index, 1);
+      }
+
+      remove(item: T): void {
+        this.removeAt(this.items.indexOf(item));
+      }
+
+      toString(): string {
+        return `[ ${this.items.join(", ")} ]`;
       }
     }
 
-    class MyString extends String implements ISomething {
-      some(): void {}
+    const ponies = new Container("Twilight", "Rarity");
+    ponies.add("Spike");
+    ponies.add(0, "Celestia");
+    this.log(`${ponies}`);
+    ponies.remove("Rarity");
+    ponies.removeAt(0);
+    this.log(`${ponies}`);
+
+    this.separator();
+
+    const numbers = new Container(...Array(5).keys());
+    this.log(`get(2): ${numbers.get(2)}`);
+    this.log(`${numbers}`);
+  }
+
+  exampleUtilityTypes() {
+    interface Princess {
+      name: string;
+      surname: string;
+      powerRank: number;
     }
 
-    const constrained = new Constrained();
-    const myString = new MyString("Hey my string!");
-    constrained.print(myString);
-    // constrained.print("Normal string.") // Compiler will complain.
+    const twilight: Princess = {
+      name: "Twilight",
+      surname: "Sparkle",
+      powerRank: 12,
+    };
 
-    // const functionConstrained = <T extends Function>(func: T) => {};
-    // const functionConstrainedLiteral = <T extends () => void>(func: T) => {};
+    const update = (princess: Princess, changes: Partial<Princess>) => ({
+      ...princess,
+      ...changes,
+    });
 
-    // const literalConstrained = <T extends "first" | "second">(literal: T) => {};
+    this.log(update(twilight, { powerRank: 13 }));
 
-    // const defaultConstrained = <T = string>(message: T) => {};
+    const label: Pick<Princess, "name" | "surname"> = twilight;
+    const anonymous: Omit<Princess, "name"> = twilight;
+    this.log([label.name, anonymous.powerRank]);
 
-    // const multipleVarConstrained = <T, V>(first: T, second: V) => {};
+    const aspects: Record<"day" | "night", Princess> = {
+      day: { name: "Celestia", surname: "Sol", powerRank: 15 },
+      night: { name: "Luna", surname: "Selene", powerRank: 14 },
+    };
+    this.log(aspects.night);
+
+    const locked: Readonly<Princess> = twilight;
+    // @ts-expect-error: locked is readonly
+    locked.powerRank = 0;
   }
 }
