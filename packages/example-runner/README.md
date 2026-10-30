@@ -15,7 +15,8 @@ Registers and runs example classes.
   was never registered.
 - `runExamples(classes)`: creates one instance per class and runs its examples
   in order. Returns `false` when an example threw; the throw is printed and the
-  next example still runs.
+  next example still runs. A constructor that throws is reported the same way and
+  the next class runs.
 
 Output of `runExamples`:
 

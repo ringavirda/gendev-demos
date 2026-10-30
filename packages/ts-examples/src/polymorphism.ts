@@ -33,7 +33,7 @@ export class PolymorphismExamples extends ExamplesBase {
       new Pegasus("Rainbow"),
       new Alicorn("Twilight"),
       new Dragon("Spike"),
-      new Flier("Pinkie"),
+      new Flier("Derpy"),
     ];
 
     for (const flier of fliers) this.log(flier.fly());

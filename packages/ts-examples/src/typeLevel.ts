@@ -15,15 +15,15 @@ export class TypeLevelExamples extends ExamplesBase {
     const draft: MyPartial<Princess> = { name: "Twilight" };
     this.log(draft);
 
-    const celestia: MyReadonly<Princess> = {
-      name: "Celestia",
+    const twilight: MyReadonly<Princess> = {
+      name: "Twilight",
       surname: "Sparkle",
       powerRank: 100,
     };
-    this.log(celestia);
+    this.log(twilight);
 
     // @ts-expect-error: every property of MyReadonly is readonly
-    celestia.powerRank = 1;
+    twilight.powerRank = 1;
   }
 
   exampleKeyRemapping(): void {
@@ -103,7 +103,11 @@ export class TypeLevelExamples extends ExamplesBase {
     const night: GetPrincessMeta<"night"> = "Luna";
     this.log([friendship, night]);
 
-    // @ts-expect-error: "dawn" is not a key of Princesses
-    void ("Celestia" as GetPrincessMeta<"dawn">);
+    const raiseMoon = (princess: GetPrincessMeta<"night">) =>
+      `${princess} raises the moon`;
+    this.log(raiseMoon(night));
+
+    // @ts-expect-error: GetPrincessMeta<"night"> is "Luna" and nothing else
+    raiseMoon("Celestia");
   }
 }
