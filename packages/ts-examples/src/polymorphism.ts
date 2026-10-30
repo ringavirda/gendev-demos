@@ -19,13 +19,13 @@ export class PolymorphismExamples extends ExamplesBase {
 
     class Alicorn extends Flier {
       override fly() {
-        return `${this.name} glides on magic`;
+        return `${this.name} flies with wings and magic`;
       }
     }
 
     class Dragon extends Flier {
       override fly() {
-        return `${this.name} soars on hot air`;
+        return `${this.name} flies on his dragon wings`;
       }
     }
 
@@ -64,7 +64,10 @@ export class PolymorphismExamples extends ExamplesBase {
     const last = <T>(items: readonly T[]) => items[items.length - 1];
 
     const pegasus: Pegasus = last([{ weather: "rain" }, { weather: "snow" }]);
-    const unicorn: Unicorn = last([{ spell: "levitation" }, { spell: "teleport" }]);
+    const unicorn: Unicorn = last([
+      { spell: "levitation" },
+      { spell: "teleport" },
+    ]);
 
     this.log(pegasus.weather);
     this.log(unicorn.spell);

@@ -34,9 +34,9 @@ export class TypingExamples extends ExamplesBase {
     const cadance: Alicorn = { name: "Cadance", powerRank: 10 };
     this.log([twilight, cadance]);
 
+    const princesses: Princess[] = [twilight];
     // @ts-expect-error: powerRank is required
-    const spike: Princess = { name: "Spike" };
-    this.log(spike);
+    princesses.push({ name: "Luna" });
   }
 
   exampleDeclarationMerging() {

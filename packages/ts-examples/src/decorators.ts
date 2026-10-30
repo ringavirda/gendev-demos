@@ -173,7 +173,9 @@ export class DecoratorsExamples extends ExamplesBase {
     }
 
     const registry = new Registry();
-    this.log(registry.register("Twilight", "Magic", "Golden Oak Library"));
+    this.log(
+      registry.register("Twilight Sparkle", "Magic", "Golden Oak Library"),
+    );
     try {
       registry.register("Rarity", "Generosity");
     } catch (error) {

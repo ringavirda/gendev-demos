@@ -15,7 +15,8 @@ export class ParadigmsExamples extends ExamplesBase {
     const fliers: string[] = [];
 
     for (const pony of ponies) {
-      if (pony.kind === "pegasus" || pony.kind === "alicorn") fliers.push(pony.name);
+      if (pony.kind === "pegasus" || pony.kind === "alicorn")
+        fliers.push(pony.name);
     }
 
     this.log(fliers.join(", "));
