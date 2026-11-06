@@ -22,7 +22,7 @@ describe("princess commands", () => {
 
   it("add takes the typed name, not the category", async () => {
     const { executor, service } = createHarness([
-      "\n",
+      "Shadow Moonlight\n",
       "Moon Princess, Night Light\n",
     ]);
     expect(await executor.execute("add young Moonlight")).toBe("ok");
@@ -33,6 +33,7 @@ describe("princess commands", () => {
       "Fallenstar",
       "Moonlight",
     ]);
+    expect(young.princesses[3].oldName).toBe("Shadow Moonlight");
     expect(young.princesses[3].titles.list).toEqual([
       "Moon Princess",
       "Night Light",

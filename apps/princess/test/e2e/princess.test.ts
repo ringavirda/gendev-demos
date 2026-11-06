@@ -139,13 +139,15 @@ describe.each(["json", "sqlite"] as const)("%s storage", (storage) => {
       const session = await run(
         [],
         env,
-        "add young Moonlight\n\nMoon Princess, Night Light\nls young\nq\n",
+        "add young Moonlight\nShadow Moonlight\nMoon Princess, Night Light\nls young\nq\n",
       );
       expect(session.code).toBe(0);
       expect(session.stdout).toContain("  3 - Moonlight");
       const again = await run(["get", "young", "moon"], env);
       expect(again.code).toBe(0);
-      expect(again.stdout).toContain("Yay! You've selected: Moonlight");
+      expect(again.stdout).toContain(
+        "Yay! You've selected: Moonlight (Shadow Moonlight)",
+      );
       expect(again.stdout).toContain("\tMoon Princess, Night Light");
       expect(session.stdout).not.toContain(" - young");
     },
