@@ -6,8 +6,9 @@
     "build": "tsc",
     "start": "node dist/app.js",
     "dev": "tsc --incremental && concurrently --kill-others --raw \"tsc --watch --incremental --preserveWatchOutput\" \"node --watch dist/app.js\"",
-    "typecheck": "tsc --noEmit",
-    "clean": "rimraf dist"
+    "typecheck": "tsc --noEmit && tsc -p test",
+    "clean": "rimraf dist",
+    "test": "vitest run"
   },
   "dependencies": {
     "@gendev/cli-lib": "workspace:*",
@@ -18,6 +19,7 @@
     "@types/node": "catalog:",
     "concurrently": "catalog:",
     "rimraf": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

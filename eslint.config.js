@@ -16,4 +16,29 @@ export default defineConfig([
       "@typescript-eslint/no-unsafe-function-type": "off",
     },
   },
+  {
+    files: ["apps/princess/src/model/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "../**",
+                "@gendev/*",
+                "inversify",
+                "reflect-metadata",
+                "zod",
+                "drizzle-orm",
+                "drizzle-orm/**",
+                "better-sqlite3",
+              ],
+              message: "The model imports nothing outside src/model.",
+            },
+          ],
+        },
+      ],
+    },
+  },
 ]);
