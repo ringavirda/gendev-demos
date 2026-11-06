@@ -1,10 +1,19 @@
+import { tmpdir } from "node:os";
 import { resolve } from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ConfigError, loadConfig } from "../../src/app/config.js";
 
 const packageFolder = resolve(import.meta.dirname, "../..");
 
 describe("loadConfig", () => {
+  beforeEach(() => {
+    vi.spyOn(process, "cwd").mockReturnValue(tmpdir());
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("defaults to json, warn and a file in the package folder", () => {
     expect(loadConfig({})).toEqual({
       storage: "json",
@@ -37,7 +46,7 @@ describe("loadConfig", () => {
 
   it("a relative PRINCESS_DATA resolves against the cwd", () => {
     expect(loadConfig({ PRINCESS_DATA: "x/p.json" }).dataPath).toBe(
-      resolve(process.cwd(), "x/p.json"),
+      resolve(tmpdir(), "x/p.json"),
     );
   });
 });
