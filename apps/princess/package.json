@@ -12,10 +12,14 @@
   },
   "dependencies": {
     "@gendev/cli-lib": "workspace:*",
+    "better-sqlite3": "catalog:",
+    "drizzle-orm": "catalog:",
     "inversify": "catalog:",
-    "reflect-metadata": "catalog:"
+    "reflect-metadata": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "catalog:",
     "@types/node": "catalog:",
     "concurrently": "catalog:",
     "rimraf": "catalog:",

@@ -11,3 +11,10 @@ catalog:
   vitest: ^5.0.4
   concurrently: ^10.0.6
   inversify: ^8.2.4
+  zod: ^4.6.7
+  drizzle-orm: ^0.45.4
+  better-sqlite3: ^13.0.3
+  "@types/better-sqlite3": ^9.6.0
+
+allowBuilds:
+  better-sqlite3: false
