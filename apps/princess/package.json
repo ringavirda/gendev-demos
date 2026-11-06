@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/app.js",
-    "dev": "tsc --incremental && concurrently --kill-others --raw \"tsc --watch --incremental --preserveWatchOutput\" \"node --watch dist/app.js\"",
+    "start": "node dist/app/main.js",
+    "dev": "tsc --incremental && concurrently --kill-others --raw \"tsc --watch --incremental --preserveWatchOutput\" \"node --watch dist/app/main.js\"",
     "typecheck": "tsc --noEmit && tsc -p test",
     "clean": "rimraf dist",
     "test": "vitest run"

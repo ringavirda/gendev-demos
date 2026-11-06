@@ -3,3 +3,6 @@ node_modules/
 
 # Rendered files.
 dist/
+
+# Princess data.
+apps/princess/data/
