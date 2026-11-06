@@ -92,6 +92,7 @@ describe.each(["json", "sqlite"] as const)("%s storage", (storage) => {
       const result = await run(["get", "young", "nobody"], env);
       expect(result.code).toBe(1);
       expect(result.stderr).toContain("Err:");
+      expect(result.stderr).not.toContain("\u001b");
     },
     timeout,
   );
@@ -146,7 +147,7 @@ describe.each(["json", "sqlite"] as const)("%s storage", (storage) => {
       expect(again.code).toBe(0);
       expect(again.stdout).toContain("Yay! You've selected: Moonlight");
       expect(again.stdout).toContain("\tMoon Princess, Night Light");
-      expect(again.stdout).not.toContain(" - young");
+      expect(session.stdout).not.toContain(" - young");
     },
     timeout,
   );
