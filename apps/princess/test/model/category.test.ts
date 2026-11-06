@@ -61,6 +61,21 @@ describe("Category", () => {
     expect(category.find("1").oldName).toBe("Sunset Shimmer");
   });
 
+  it("replaces by exact common name, not prefix", () => {
+    const category = new Category("x", [
+      Princess.of({ commonName: "Sunsetglow" }),
+      Princess.of({ commonName: "Sunset" }),
+    ]);
+    category.replace(
+      Princess.of({ commonName: "Sunset", oldName: "Sunset Shimmer" }),
+    );
+    expect(names(category)).toEqual(["Sunsetglow", "Sunset"]);
+    expect(category.find("1").oldName).toBe("Sunset Shimmer");
+    expect(() => category.replace(Princess.of({ commonName: "Sun" }))).toThrow(
+      NotFoundError,
+    );
+  });
+
   it("rejects duplicates given to the constructor", () => {
     expect(
       () =>

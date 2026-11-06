@@ -68,7 +68,12 @@ export class Category {
    * @throws {NotFoundError} when no princess has that common name.
    */
   replace(princess: Princess): Princess {
-    const index = this.indexOf(princess.commonName.value);
+    const index = this.items.findIndex((item) =>
+      item.commonName.equals(princess.commonName),
+    );
+    if (index < 0) {
+      throw new NotFoundError(`Unknown princess [${princess.commonName}].`);
+    }
     const previous = this.items[index];
     this.items[index] = princess;
     return previous;
