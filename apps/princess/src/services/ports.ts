@@ -1,0 +1,41 @@
+import type { Category } from "../model/category.js";
+
+/** Where the categories live. Methods other than `load` may be called only after it resolves. */
+export interface PrincessRepository {
+  /**
+   * Opens, creates or seeds the store. Called once, before anything else.
+   * @throws when the store cannot be read.
+   */
+  load(): Promise<void>;
+  /** @returns the category names, in order. */
+  categoryNames(): Promise<readonly string[]>;
+  /**
+   * @param name a category name or a prefix of one, matched without case.
+   * @returns a new category on every call; changing it does not change the store.
+   * @throws {NotFoundError} when no category matches.
+   */
+  get(name: string): Promise<Category>;
+  /** Replaces the stored category of the same name with this one. */
+  save(category: Category): Promise<void>;
+}
+
+export const REPOSITORY = Symbol("PrincessRepository");
+
+export type LogLevel = "debug" | "info" | "warn" | "error";
+
+export interface Logger {
+  debug(message: string): void;
+  info(message: string): void;
+  warn(message: string): void;
+  error(message: string): void;
+}
+
+export const LOGGER = Symbol("Logger");
+
+/** @returns an integer in `[0, max)`. */
+export type Random = (max: number) => number;
+
+export const RANDOM = Symbol("Random");
+
+/** Token for `EventBus<PrincessEvent>`; the type argument does not exist at runtime. */
+export const EVENT_BUS = Symbol("EventBus");

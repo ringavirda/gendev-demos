@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@gendev/cli-lib": "workspace:*",
+    "inversify": "catalog:",
     "reflect-metadata": "catalog:"
   },
   "devDependencies": {
