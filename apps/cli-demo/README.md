@@ -1,7 +1,7 @@
 # cli-demo
 
-A read-eval loop on top of cli-lib. It runs the default `help` command and its own `quit` and
-`q` command, which replace the default exit command.
+A read-eval loop on top of cli-lib, built with `new` and no container. It runs the default `help`
+command and stops at `quit`, `q` or the end of the input.
 
 ## Run
 

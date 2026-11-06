@@ -19,9 +19,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "chalk": "catalog:",
-    "reflect-metadata": "catalog:",
-    "tsyringe": "catalog:"
+    "chalk": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",

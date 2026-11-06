@@ -1,15 +1,19 @@
-export type Command = {
-  selectors: Array<string>;
-  description?: string;
-  help?: string[];
-  actionAsync: (args: CommandArgs) => Promise<void>;
-};
+/** A command the executor can run. */
+export interface Command {
+  /** Words that run the command; the first one is its main name. */
+  readonly selectors: readonly string[];
+  /** Parameter names; a trailing `?` marks an optional one. */
+  readonly params: readonly string[];
+  /** One line for the command list. */
+  readonly description: string;
+  /** Extra lines shown by `help <command>`. */
+  readonly help?: readonly string[];
+  /** Called with the words after the selector. */
+  action(...words: string[]): void | Promise<void>;
+}
 
-export type CommandArgs = {
-  raw: Array<string>;
-  // Most commands use this convention.
-  selector: string;
-  list: Array<string>;
-
-  // Options may be added here.
-};
+/** Where the executor prints. `CLI` fits it. */
+export interface Output {
+  echo(message?: string): void;
+  echoError(message: string): void;
+}

@@ -10,9 +10,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@gendev/cli-lib": "workspace:*",
-    "reflect-metadata": "catalog:",
-    "tsyringe": "catalog:"
+    "@gendev/cli-lib": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

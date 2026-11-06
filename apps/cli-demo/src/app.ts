@@ -1,33 +1,14 @@
-import "reflect-metadata";
-import { container, singleton } from "tsyringe";
+import { CLI, Executor, checkArguments } from "@gendev/cli-lib";
 
-import { CLI, Executor } from "@gendev/cli-lib";
+const cli = new CLI();
+const executor = new Executor(cli);
+executor.use(checkArguments);
 
-@singleton()
-class App {
-  constructor(
-    private readonly _cli: CLI,
-    private readonly _executor: Executor,
-  ) {
-    this._executor.registerCommand(
-      {
-        selectors: ["quit", "q"],
-        actionAsync: async () => {
-          this._cli.echo("Exiting...");
-          process.exit(0);
-        },
-      },
-      true,
-    );
-  }
-
-  public async run() {
-    this._cli.echoSuccess("Demo CLI app is running...");
-    while (true) {
-      const command = await this._cli.readCommandAsync("> ");
-      await this._executor.executeAsync(command);
-    }
-  }
+cli.echoSuccess("Demo CLI app is running...");
+for (;;) {
+  const line = await cli.read(">");
+  if (line === null || ["quit", "q"].includes(line.trim())) break;
+  await executor.execute(line);
 }
-
-container.resolve(App).run();
+cli.echo("Exiting...");
+cli.close();

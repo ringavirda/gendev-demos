@@ -1,78 +1,90 @@
-import chalk from "chalk";
-import { Interface, createInterface } from "readline/promises";
-import { singleton } from "tsyringe";
+import chalk, { chalkStderr } from "chalk";
+import type { Readable, Writable } from "node:stream";
+import { createInterface } from "node:readline/promises";
 
-import { EchoOptions } from "./models/echo.js";
-import { CommandArgs } from "./models/command.js";
+import type { EchoOptions } from "./models/echo.js";
 
-@singleton()
+/**
+ * Terminal input and output: a prompt that reads one line at a time and
+ * colored message helpers.
+ */
 export class CLI {
-  private readonly _cli: Interface;
+  private readonly _rl;
+  private readonly _lines;
+  private _closed = false;
 
-  constructor() {
-    this._cli = createInterface({
-      input: process.stdin,
-      output: process.stdout,
-      terminal: true,
+  /**
+   * @param _input where lines come from.
+   * @param _output where prompts and messages go.
+   * @param _errors where error messages go.
+   */
+  constructor(
+    input: Readable = process.stdin,
+    private readonly _output: Writable = process.stdout,
+    private readonly _errors: Writable = process.stderr,
+  ) {
+    this._rl = createInterface({ input, output: this._output });
+    this._lines = this._rl[Symbol.asyncIterator]();
+    this._rl.on("close", () => {
+      this._closed = true;
     });
-    this._cli.setPrompt("");
-    this._cli.on("SIGINT", () => {
-      this.echo();
-      this.echoError("[Ctrl+C] triggered, exiting...");
-      this._cli.close();
-      process.exit(0);
-    });
-    this._cli.on("close", () => {
-      process.exit(0);
-    });
   }
 
-  public close(): void {
-    this._cli.close();
+  /**
+   * Shows the prompt and waits for the next line.
+   *
+   * @param prompt text shown before the cursor.
+   * @returns the line, or `null` when the input has ended (Ctrl+D, end of a
+   * pipe, Ctrl+C) or after `close()`.
+   */
+  public async read(prompt: string): Promise<string | null> {
+    if (this._closed) this._output.write(`${prompt} `);
+    else {
+      this._rl.setPrompt(`${prompt} `);
+      this._rl.prompt();
+    }
+    const { value, done } = await this._lines.next();
+    return done ? null : value;
   }
 
-  public async readAsync(prompt: string): Promise<string> {
-    return await this._cli.question(`${prompt} `);
+  /**
+   * Prints a line to the output.
+   *
+   * @param message text to print, an empty line when omitted.
+   * @param options color and style of the text.
+   */
+  public echo(message: string = "", options?: EchoOptions): void {
+    let text = message;
+    if (options?.color) text = chalk[options.color](text);
+    if (options?.underline) text = chalk.underline(text);
+    if (options?.bold) text = chalk.bold(text);
+    this._output.write(`${text}\n`);
   }
 
-  public async readCommandAsync(prompt: string): Promise<CommandArgs> {
-    const argsRaw = await this.readAsync(prompt);
-    const args = argsRaw
-      .split(" ")
-      .map((s) => s.trim())
-      .filter((s) => s != "");
-
-    if (args.length === 0) throw new Error("Nothing was provided!");
-    return {
-      raw: args,
-      selector: args[0],
-      list: args.slice(1),
-    };
-  }
-
-  public echoInline(message: string, options?: EchoOptions): void {
-    let request = message;
-    if (options?.color) request = chalk[options.color](request);
-    if (options?.underline) request = chalk.underline(request);
-    if (options?.bold) request = chalk.bold(request);
-    this._cli.write(request);
-  }
-
-  public echo(message?: string, options?: EchoOptions): void {
-    if (message) this.echoInline(message, options);
-    this.echoInline("\n");
-  }
-
+  /** Prints a line to the output in green. */
   public echoSuccess(message: string): void {
     this.echo(chalk.green(message));
   }
+
+  /** Prints a line to the output in yellow, after an underlined `Warn:`. */
   public echoWarn(message: string): void {
     this.echo(chalk.yellow(`${chalk.underline("Warn:")} ${message}`));
   }
+
+  /** Prints a line to the error stream in red, after an underlined `Err:`. */
   public echoError(message: string): void {
-    this.echo(chalk.red(`${chalk.underline("Err:")} ${message}`));
+    this._errors.write(
+      `${chalkStderr.red(`${chalkStderr.underline("Err:")} ${message}`)}\n`,
+    );
   }
+
+  /** Prints a line to the output in bold red. */
   public echoTitle(message: string): void {
     this.echo(chalk.bold.red(message));
+  }
+
+  /** Closes the input. Safe to call more than once. */
+  public close(): void {
+    this._rl.close();
   }
 }

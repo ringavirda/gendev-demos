@@ -41,4 +41,68 @@ export default defineConfig([
       ],
     },
   },
+  {
+    files: ["apps/princess/src/services/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "../storage/**",
+                "../cli/**",
+                "../app/**",
+                "@gendev/*",
+                "zod",
+                "drizzle-orm",
+                "drizzle-orm/**",
+                "better-sqlite3",
+              ],
+              message: "Services import only the model.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["apps/princess/src/storage/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["../cli/**", "../app/**", "@gendev/*"],
+              message: "Storage imports only services and the model.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["apps/princess/src/cli/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "../storage/**",
+                "../app/**",
+                "zod",
+                "drizzle-orm",
+                "drizzle-orm/**",
+                "better-sqlite3",
+              ],
+              message: "The CLI imports only services and the model.",
+            },
+          ],
+        },
+      ],
+    },
+  },
 ]);

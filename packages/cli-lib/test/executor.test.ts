@@ -1,72 +1,151 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { CLI, Executor } from "../src/index.js";
+import {
+  Executor,
+  UsageError,
+  checkArguments,
+  type Command,
+  type Middleware,
+} from "../src/index.js";
 
 function createExecutor() {
-  const cli = {
-    echo: vi.fn(),
-    echoInline: vi.fn(),
-    echoSuccess: vi.fn(),
-    echoError: vi.fn(),
-    close: vi.fn(),
-  };
-  return { cli, executor: new Executor(cli as unknown as CLI) };
+  const printed: [string, string][] = [];
+  const executor = new Executor({
+    echo: (message = "") => printed.push(["echo", message]),
+    echoError: (message) => printed.push(["error", message]),
+  });
+  return { printed, executor };
 }
 
-describe("Executor duplicate selectors", () => {
-  beforeEach(() => {
-    vi.spyOn(process, "exit").mockImplementation((() => undefined) as never);
-  });
+const command = (
+  selectors: string[],
+  action: Command["action"] = () => {},
+  params: string[] = [],
+): Command => ({ selectors, params, description: "d", action });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it("throws when a selector is already held by a default command", () => {
+describe("Executor", () => {
+  it("throws on a held selector", () => {
     const { executor } = createExecutor();
-    expect(() =>
-      executor.registerCommand({
-        selectors: ["quit", "q"],
-        actionAsync: async () => {},
-      }),
-    ).toThrow("Command with selectors (exit, quit, q) already exists!");
+    expect(() => executor.registerCommand(command(["h", "x"]))).toThrow(
+      "Command with selectors (help, h) already exists! Use override flag to replace it.",
+    );
   });
 
-  it("replaces the shared command when override is set", async () => {
-    const { cli, executor } = createExecutor();
-    const action = vi.fn(async () => {});
+  it("override replaces in place", async () => {
+    const { executor, printed } = createExecutor();
+    executor.registerCommand(command(["a"]));
+    executor.registerCommand(command(["b"]));
+    executor.registerCommand(command(["a'", "a"]), true);
+    await executor.execute("help");
+    expect(printed.map(([, m]) => m.split(" ")[2])).toEqual([
+      "help,",
+      "a',",
+      "b",
+    ]);
+  });
+
+  it("runs middleware in use order around the action", async () => {
+    const { executor } = createExecutor();
+    const trace: string[] = [];
+    const step =
+      (name: string): Middleware =>
+      async (_context, next) => {
+        trace.push(`${name} before`);
+        await next();
+        trace.push(`${name} after`);
+      };
+    executor.use(step("1"));
+    executor.use(step("2"));
+    executor.registerCommand(command(["go"], () => void trace.push("action")));
+    await executor.execute("go");
+    expect(trace).toEqual([
+      "1 before",
+      "2 before",
+      "action",
+      "2 after",
+      "1 after",
+    ]);
+  });
+
+  it("a middleware that skips next skips the action", async () => {
+    const { executor } = createExecutor();
+    const action = vi.fn();
+    executor.use(async () => {});
+    executor.registerCommand(command(["go"], action));
+    expect(await executor.execute("go")).toBe("ok");
+    expect(action).not.toHaveBeenCalled();
+  });
+
+  it("an unknown selector prints and returns unknown without middleware", async () => {
+    const { executor, printed } = createExecutor();
+    const middleware = vi.fn<Middleware>(async (_context, next) => next());
+    executor.use(middleware);
+    expect(await executor.execute("nope")).toBe("unknown");
+    expect(printed).toEqual([["error", "Unknown command: nope"]]);
+    expect(middleware).not.toHaveBeenCalled();
+  });
+
+  it("a blank line returns empty and prints nothing", async () => {
+    const { executor, printed } = createExecutor();
+    expect(await executor.execute("   ")).toBe("empty");
+    expect(printed).toEqual([]);
+  });
+
+  it("checkArguments gives usage for too few or too many words", async () => {
+    const { executor, printed } = createExecutor();
+    executor.use(checkArguments);
+    executor.registerCommand(command(["x"], () => {}, ["a", "b?"]));
+    expect(await executor.execute("x")).toBe("usage");
+    expect(await executor.execute("x 1 2 3")).toBe("usage");
+    expect(printed).toEqual([
+      ["error", "Usage: x <a> [b]"],
+      ["error", "Usage: x <a> [b]"],
+    ]);
+    expect(await executor.execute("x 1")).toBe("ok");
+  });
+
+  it("an escaping error prints its message and returns failed", async () => {
+    const { executor, printed } = createExecutor();
     executor.registerCommand(
-      { selectors: ["quit", "q"], actionAsync: action },
-      true,
+      command(["boom"], () => {
+        throw new Error("broken");
+      }),
     );
-
-    await executor.executeAsync({ raw: ["q"], selector: "q", list: [] });
-    expect(action).toHaveBeenCalledOnce();
-    expect(process.exit).not.toHaveBeenCalled();
-
-    await executor.executeAsync({
-      raw: ["exit"],
-      selector: "exit",
-      list: [],
-    });
-    expect(cli.echoError).toHaveBeenCalledWith("Unknown command: exit");
+    expect(await executor.execute("boom")).toBe("failed");
+    expect(printed).toEqual([["error", "broken"]]);
   });
 
-  it("registers a command with no shared selector beside the defaults", async () => {
-    const { cli, executor } = createExecutor();
-    const action = vi.fn(async () => {});
-    executor.registerCommand({ selectors: ["hello"], actionAsync: action });
-
-    await executor.executeAsync({
-      raw: ["hello"],
-      selector: "hello",
-      list: [],
+  it("a middleware that handles an error sets the status", async () => {
+    const { executor, printed } = createExecutor();
+    executor.use(async (context, next) => {
+      try {
+        await next();
+      } catch {
+        context.status = "usage";
+      }
     });
-    expect(action).toHaveBeenCalledOnce();
-
-    await executor.executeAsync({ raw: ["h"], selector: "h", list: [] });
-    expect(cli.echoSuccess).toHaveBeenCalledWith(
-      "Supported command signatures:",
+    executor.registerCommand(
+      command(["boom"], () => {
+        throw new UsageError("bad");
+      }),
     );
+    expect(await executor.execute("boom")).toBe("usage");
+    expect(printed).toEqual([]);
+  });
+
+  it("help lists every command with its params", async () => {
+    const { executor, printed } = createExecutor();
+    executor.registerCommand(command(["add", "a"], () => {}, ["x", "y?"]));
+    await executor.execute("help");
+    expect(printed).toEqual([
+      ["echo", "  help, h [command] - Show the command list or one command."],
+      ["echo", "  add, a <x> [y] - d"],
+    ]);
+  });
+
+  it("help for an unknown command is a usage error", async () => {
+    const { executor, printed } = createExecutor();
+    expect(await executor.execute("help nope")).toBe("usage");
+    expect(printed).toEqual([["error", "Unknown command: nope"]]);
   });
 });
