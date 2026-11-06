@@ -27,7 +27,7 @@
       "name": "Debug princess",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/apps/princess/dist/app.js",
+      "program": "${workspaceFolder}/apps/princess/dist/app/main.js",
       "cwd": "${workspaceFolder}/apps/princess",
       "console": "integratedTerminal",
       "sourceMaps": true,

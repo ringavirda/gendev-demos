@@ -85,9 +85,12 @@ runs every topic.
 
 ### App structure, patterns and DI
 
-`apps/princess` is a selector CLI with layers and dependency injection.
+`apps/princess` is a selector CLI built in layers: model, services, storage,
+cli and app. It runs interactively or as one command, and keeps its data in
+JSON or SQLite depending on `PRINCESS_STORAGE`.
 
-    pnpm --filter @gendev/princess start
+    pnpm --filter @gendev/princess start get young sunset
+    PRINCESS_STORAGE=sqlite pnpm --filter @gendev/princess start
 
 ## Templates
 
