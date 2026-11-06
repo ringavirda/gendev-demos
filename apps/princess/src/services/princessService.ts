@@ -82,8 +82,12 @@ export class PrincessService implements HasLogger {
   }
 
   /**
+   * @param category a category name or a prefix of one, matched without case.
+   * @param princess the princess to add.
+   * @returns once the category is saved and the event published.
    * @throws {NotFoundError} when the category is not found.
    * @throws {DuplicateError} when the common name is already in the category.
+   * @throws whatever the repository's save rejects with; nothing is published then.
    */
   @logged
   async add(category: string, princess: Princess): Promise<void> {
@@ -94,8 +98,11 @@ export class PrincessService implements HasLogger {
   }
 
   /**
+   * @param category a category name or a prefix of one, matched without case.
+   * @param nameOrIndex a zero-based index, or a name prefix matched without case.
    * @returns the removed princess.
    * @throws {NotFoundError} when the category or the princess is not found.
+   * @throws whatever the repository's save rejects with; nothing is published then.
    */
   @logged
   async remove(category: string, nameOrIndex: string): Promise<Princess> {
@@ -107,9 +114,12 @@ export class PrincessService implements HasLogger {
   }
 
   /**
+   * @param category a category name or a prefix of one, matched without case.
+   * @param nameOrIndex a zero-based index, or a name prefix matched without case.
    * @param changes fields to replace; fields not given are kept.
    * @returns the princess as changed.
    * @throws {NotFoundError} when the category or the princess is not found.
+   * @throws whatever the repository's save rejects with; nothing is published then.
    */
   @logged
   async change(

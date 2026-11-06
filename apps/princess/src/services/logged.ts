@@ -1,5 +1,6 @@
 import type { Logger } from "./ports.js";
 
+/** A class whose instances expose the logger that `logged` writes to. */
 export interface HasLogger {
   readonly logger: Logger;
 }
@@ -7,7 +8,10 @@ export interface HasLogger {
 /**
  * Method decorator for async methods of a class with a `logger`. Writes
  * `<key>(<arguments>) took <n> ms` at debug level, or `<key>(<arguments>) failed after <n> ms`
- * and rethrows; `<n>` is whole milliseconds.
+ * and rethrows; `<n>` is whole milliseconds. Works only on a method that returns a Promise.
+ * @param target the class prototype.
+ * @param key the method name.
+ * @param descriptor the method's descriptor; its value is replaced by the wrapper.
  */
 export function logged(
   target: HasLogger,

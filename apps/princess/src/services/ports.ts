@@ -15,14 +15,21 @@ export interface PrincessRepository {
    * @throws {NotFoundError} when no category matches.
    */
   get(name: string): Promise<Category>;
-  /** Replaces the stored category of the same name with this one. */
+  /**
+   * Replaces the stored category of the same name with this one.
+   * @param category the category to store.
+   * @throws when the store cannot be written; the category is then unchanged.
+   */
   save(category: Category): Promise<void>;
 }
 
+/** Injection token for `PrincessRepository`. */
 export const REPOSITORY = Symbol("PrincessRepository");
 
+/** Severity of a log message, from least to most severe. */
 export type LogLevel = "debug" | "info" | "warn" | "error";
 
+/** Writes one message at each severity. */
 export interface Logger {
   debug(message: string): void;
   info(message: string): void;
@@ -30,11 +37,16 @@ export interface Logger {
   error(message: string): void;
 }
 
+/** Injection token for `Logger`. */
 export const LOGGER = Symbol("Logger");
 
-/** @returns an integer in `[0, max)`. */
+/**
+ * @param max a positive integer
+ * @returns an integer in `[0, max)`.
+ */
 export type Random = (max: number) => number;
 
+/** Injection token for `Random`. */
 export const RANDOM = Symbol("Random");
 
 /** Token for `EventBus<PrincessEvent>`; the type argument does not exist at runtime. */

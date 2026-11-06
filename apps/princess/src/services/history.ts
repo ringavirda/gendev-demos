@@ -12,6 +12,7 @@ export class History {
     events.subscribe((event) => this.items.push(event));
   }
 
+  /** The events in publication order. */
   get events(): readonly PrincessEvent[] {
     return this.items;
   }
