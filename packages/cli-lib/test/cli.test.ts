@@ -45,4 +45,11 @@ describe("CLI", () => {
     cli.close();
     expect(await cli.read(">")).toBeNull();
   });
+
+  it("resolves null after close even when lines are still buffered", async () => {
+    const { cli } = createCli(["a\nb\n"]);
+    expect(await cli.read(">")).toBe("a");
+    cli.close();
+    expect(await cli.read(">")).toBeNull();
+  });
 });

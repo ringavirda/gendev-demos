@@ -12,6 +12,7 @@ export class CLI {
   private readonly _rl;
   private readonly _lines;
   private _closed = false;
+  private _shut = false;
 
   /**
    * @param _input where lines come from.
@@ -38,8 +39,10 @@ export class CLI {
    * pipe, Ctrl+C) or after `close()`.
    */
   public async read(prompt: string): Promise<string | null> {
-    if (this._closed) this._output.write(`${prompt} `);
-    else {
+    if (this._closed) {
+      this._output.write(`${prompt} `);
+      if (this._shut) return null;
+    } else {
       this._rl.setPrompt(`${prompt} `);
       this._rl.prompt();
     }
@@ -85,6 +88,7 @@ export class CLI {
 
   /** Closes the input. Safe to call more than once. */
   public close(): void {
+    this._shut = true;
     this._rl.close();
   }
 }
