@@ -11,18 +11,24 @@ import { StorageError } from "../../src/storage/storageError.js";
 describe("SqlitePrincessRepository", () => {
   let dir: string;
   let path: string;
+  let opened: SqlitePrincessRepository[];
 
   beforeEach(async () => {
+    opened = [];
     dir = await mkdtemp(join(tmpdir(), "princess-sqlite-"));
     path = join(dir, "princesses.db");
   });
 
   afterEach(async () => {
+    for (const repository of opened) {
+      repository.close();
+    }
     await rm(dir, { recursive: true, force: true });
   });
 
   async function loaded(file: string): Promise<SqlitePrincessRepository> {
     const repository = new SqlitePrincessRepository(file);
+    opened.push(repository);
     await repository.load();
     return repository;
   }
@@ -105,6 +111,7 @@ describe("SqlitePrincessRepository", () => {
     expect(error).toBeInstanceOf(StorageError);
     expect(error.message).toContain(path);
     expect(error.message).toContain("expected array");
+    expect(error.message).not.toContain(": :");
   });
 
   it("reads princesses by position", async () => {

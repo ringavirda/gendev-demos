@@ -15,12 +15,13 @@ export class StorageError extends Error {
 
 /**
  * @param error a failure while reading stored data.
- * @returns the first schema issue as `<path>: <message>` for a `ZodError`, otherwise the error's message.
+ * @returns the first schema issue as `<path>: <message>` (just `<message>` at the root) for a `ZodError`, otherwise the error's message.
  */
 export function describeFailure(error: unknown): string {
   if (error instanceof ZodError) {
     const issue = error.issues[0];
-    return `${issue.path.join(".")}: ${issue.message}`;
+    const where = issue.path.join(".");
+    return where ? `${where}: ${issue.message}` : issue.message;
   }
   return error instanceof Error ? error.message : String(error);
 }

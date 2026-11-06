@@ -60,6 +60,13 @@ export class SqlitePrincessRepository implements PrincessRepository {
     }
   }
 
+  /** Releases the database file; safe to call when nothing is open. */
+  close(): void {
+    this.database?.close();
+    this.database = undefined;
+    this.db = undefined;
+  }
+
   async categoryNames(): Promise<readonly string[]> {
     return this.names(this.opened());
   }
