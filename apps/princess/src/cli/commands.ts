@@ -130,7 +130,7 @@ export class PrincessCommands {
           const target = await this.service.category(category);
           const princess = target.find(name);
           await confirm(this.cli, "remove", princess.commonName.value);
-          await this.service.remove(target.name, princess.commonName.value);
+          await this.service.remove(target.name, name);
           this.cli.echoSuccess(
             `[${princess}] is removed from category [${target.name}]`,
           );
@@ -159,11 +159,7 @@ export class PrincessCommands {
             return;
           }
           await confirm(this.cli, "change", princess.commonName.value);
-          const changed = await this.service.change(
-            target.name,
-            princess.commonName.value,
-            changes,
-          );
+          const changed = await this.service.change(target.name, name, changes);
           this.cli.echoSuccess(`[${changed}] is changed to:`);
           formatPrincess(changed).forEach((line) => this.cli.echo(line));
         },

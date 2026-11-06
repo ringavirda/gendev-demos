@@ -86,5 +86,32 @@ describe("princess commands", () => {
     await executor.execute("add young Moonlight");
     await executor.execute("hi");
     expect(stdout()).toContain("added Moonlight to young");
+    expect(stdout().filter((l) => l === "No changes yet.")).toHaveLength(1);
+  });
+
+  it("remove and change act on the selected princess when a name is a prefix of an earlier one", async () => {
+    const { executor, service } = createHarness(["\n", "\n", "yes\n"]);
+    await executor.execute("add young Sun");
+    await executor.execute("rm y 3");
+    expect((await service.category("young")).princesses.map(String)).toEqual([
+      "Sparkle",
+      "Sunset",
+      "Fallenstar",
+    ]);
+  });
+
+  it("change by index changes the selected princess", async () => {
+    const { executor, service } = createHarness([
+      "\n",
+      "\n",
+      "\n",
+      "x\n",
+      "yes\n",
+    ]);
+    await executor.execute("add young Sun");
+    expect(await executor.execute("ch y 3")).toBe("ok");
+    expect((await service.category("young")).find("3").titles.list).toEqual([
+      "x",
+    ]);
   });
 });
