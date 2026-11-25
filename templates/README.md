@@ -5,6 +5,8 @@ Starters for your own projects. Each folder is a complete project on its own:
 - [node-ts](node-ts) - one Node.js console app in TypeScript.
 - [monorepo](monorepo) - a pnpm workspace with a library and an app that
   uses it.
+- [web-page](web-page) - one web page that fetches data from a public API
+  and shows it.
 
 ## What you need
 
@@ -31,6 +33,7 @@ of a GitHub repository, without its git history:
 ```
 pnpm dlx tiged ringavirda/gendev-demos/templates/node-ts my-app
 pnpm dlx tiged ringavirda/gendev-demos/templates/monorepo my-repo
+pnpm dlx tiged ringavirda/gendev-demos/templates/web-page my-page
 ```
 
 The last argument is the folder to create. `npx tiged ...` does the same
@@ -71,3 +74,7 @@ In monorepo:
   `pnpm build` and `pnpm start`.
 - After `pnpm build`, open `packages/greeting/dist/index.d.ts`.
 - Add a second package next to `packages/greeting` and use it from the app.
+
+In web-page:
+
+- Follow "Things to try" in `web-page/README.md`.

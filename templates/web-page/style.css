@@ -1,0 +1,83 @@
+:root {
+  --bg: #f4f1fa;
+  --card-bg: #ffffff;
+  --border: #c9bfe3;
+  --text: #2b2540;
+  --muted: #6c6488;
+  --gap: 1rem;
+}
+
+body {
+  margin: 0;
+  padding: 1.5rem;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+}
+
+#list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  padding: 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+
+.card img {
+  width: 100%;
+  height: 10rem;
+  object-fit: contain;
+}
+
+.name {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.kind {
+  margin: 0;
+  color: var(--muted);
+}
+
+#status {
+  color: var(--muted);
+}
+
+#status.error {
+  color: #b3261e;
+}
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  height: 10rem;
+  background: var(--bg);
+  border-radius: 0.5rem;
+  color: var(--muted);
+}
+
+#more {
+  display: block;
+  margin: 1.5rem auto 0;
+  padding: 0.5rem 1.5rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+#end {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+}
