@@ -1,0 +1,14 @@
+{
+  "name": "@gendev/browser-basics",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "http-server -a 127.0.0.1 -p 8080 -c-1",
+    "dev": "vite --host 127.0.0.1 --port 5173 --strictPort"
+  },
+  "devDependencies": {
+    "http-server": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}
