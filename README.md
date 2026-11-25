@@ -1,8 +1,8 @@
 # gendev-demos
 
 Small examples for the GenDev course, one topic each, in one pnpm workspace.
-The web projects that are not small examples are in their own repositories.
-The pages are here only: `apps/browser-basics` and `templates/web-page`.
+The browser pages are here, in `apps/browser-basics` and `templates/web-page`;
+the larger web projects are in their own repositories:
 
 - webdev-retro: https://github.com/ringavirda/webdev-retro
 - waifu-picker: https://github.com/ringavirda/request-response
@@ -96,15 +96,16 @@ JSON or SQLite depending on `PRINCESS_STORAGE`.
 ### The web: HTML, CSS, the DOM and fetch
 
 `apps/browser-basics` is one page in four stages: `1-html` has the markup,
-`2-css` adds the style, `3-dom` builds the cards in JavaScript and `4-fetch`
+`2-css` adds the style, `3-dom` builds the cards in JavaScript from a list of ponies in
+`ponies.js` and `4-fetch`
 asks a public API for them. Open a stage by its folder with a trailing slash,
-for example http://localhost:8080/2-css/, or open its `index.html` with Live
+for example http://localhost:8081/2-css/, or open its `index.html` with Live
 Server in VS Code.
 
     pnpm --filter @gendev/browser-basics start
     pnpm --filter @gendev/browser-basics dev
 
-`start` serves the folder with http-server on port 8080 and `dev` serves it
+`start` serves the folder with http-server on port 8081 and `dev` serves it
 with Vite on port 5173.
 
 ## Templates

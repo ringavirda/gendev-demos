@@ -5,21 +5,21 @@ folder that works on its own; each adds one idea to the one before.
 
     pnpm --filter @gendev/browser-basics start
 
-serves the folder at http://localhost:8080/ with caching off, so a reload shows `200` in the
+serves the folder at http://localhost:8081/ with caching off, so a reload shows `200` in the
 Network tab. The page reloads by hand.
 
     pnpm --filter @gendev/browser-basics dev
 
 serves it with Vite at http://localhost:5173/ and reloads the browser when a file is saved.
 
-Open a stage by its folder with a trailing slash, for example http://localhost:8080/2-css/.
+Open a stage by its folder with a trailing slash, for example http://localhost:8081/2-css/.
 
-| Stage   | What it adds                                                     |
-| ------- | ---------------------------------------------------------------- |
-| 1-html  | Six cards written by hand, no style                              |
-| 2-css   | `style.css`: custom properties, the card as a box, a grid        |
-| 3-dom   | An empty list in the markup, the cards built by `main.js`        |
-| 4-fetch | The ponies from `fetch`, a loading line, errors, a "More" button |
+| Stage   | What it adds                                                              |
+| ------- | ------------------------------------------------------------------------- |
+| 1-html  | Six cards written by hand, no style                                       |
+| 2-css   | `style.css`: custom properties, the card as a box, a grid                 |
+| 3-dom   | An empty list in the markup, `ponies.js` and the cards built by `main.js` |
+| 4-fetch | The ponies from `fetch`, a loading line, errors, a "More" button          |
 
 ## Recorded mode
 
