@@ -2,7 +2,7 @@ const API_URL = "https://ponyapi.net/v1/character/all?limit=6";
 
 const list = document.getElementById("list");
 const status = document.getElementById("status");
-const more = document.getElementById("more");
+const more = document.querySelector("button");
 let page = 0;
 
 function addCard(pony) {
@@ -34,14 +34,15 @@ function addCard(pony) {
 }
 
 async function loadPage() {
+  more.disabled = true;
   const url = new URL(API_URL, location.href);
-  url.searchParams.set("offset", String(6 * page));
+  if (page > 0) url.searchParams.set("offset", String(6 * page));
   status.textContent = "Loading...";
   status.className = "";
   status.hidden = false;
 
   try {
-    const response = await fetch(page > 0 ? url : API_URL);
+    const response = await fetch(url);
     if (!response.ok) throw new Error(`status ${response.status}`);
     const body = await response.json();
     if (body.data.length === 0) {
@@ -50,15 +51,14 @@ async function loadPage() {
       end.textContent = "That is all of them.";
       more.replaceWith(end);
     }
-    for (const pony of body.data) {
-      addCard(pony);
-    }
+    for (const pony of body.data) addCard(pony);
     page += 1;
     status.hidden = true;
   } catch (error) {
     status.textContent = `Could not load the ponies: ${error.message}`;
     status.className = "error";
   }
+  more.disabled = false;
 }
 
 more.addEventListener("click", loadPage);
