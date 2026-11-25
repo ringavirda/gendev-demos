@@ -54,8 +54,8 @@ it; none of the dependencies here has one.
   instead of ponies.
 - Show another field on the card: open the API URL in a tab, pick a field the
   card does not show, such as `occupation`, and add it in `main.js`.
-- Break the URL (`ponyapi.net/v2/...`), reload, and read the error in the
-  Console and the Network tab.
+- Break the URL (`ponyapi.net/v1/characters/all`), reload, and read the error in the
+  Network tab. The page shows "status 405".
 - Misspell `document` in a read, for example `const x = documnet.title;`, and
   run `pnpm typecheck`.
 
@@ -69,7 +69,4 @@ Checked on 2026-11-25: no key, answers 200 with `access-control-allow-origin:
 - PokeAPI: https://pokeapi.co/api/v2/pokemon?limit=6 lists Pokemon.
 - Rick and Morty API: https://rickandmortyapi.com/api/character lists
   characters of the show.
-- Cat Facts: https://catfact.ninja/facts?limit=5 lists facts about cats.
-- Dog CEO: https://dog.ceo/api/breeds/image/random gives one picture of a dog.
-- Open-Meteo: https://api.open-meteo.com/v1/forecast?latitude=50.45&longitude=30.52&current_weather=true
-  gives the current weather at a place.
+- Cat Facts: https://catfact.ninja/facts?limit=6 lists facts about cats.
