@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "http-server -a 127.0.0.1 -p 8080 -c-1",
-    "dev": "vite --host 127.0.0.1 --port 5173 --strictPort"
+    "dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "http-server": "catalog:",
