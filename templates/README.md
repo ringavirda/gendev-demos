@@ -42,8 +42,9 @@ without pnpm.
 If you cloned the whole repository for the other examples, copy the template
 folder out of it before you start working in it.
 
-Then follow the README inside your copy: `pnpm install`, `pnpm build`,
-`pnpm start`, and the other scripts it lists.
+Then follow the README inside your copy: `pnpm install`, then the scripts it
+lists, such as `pnpm build` and `pnpm start`. A template with no build step,
+like web-page, goes straight to `pnpm dev`.
 
 ## Things to try
 

@@ -1,7 +1,8 @@
 # gendev-demos
 
 Small examples for the GenDev course, one topic each, in one pnpm workspace.
-The two web projects are in their own repositories:
+The web projects that are not small examples are in their own repositories.
+The pages are here only: `apps/browser-basics` and `templates/web-page`.
 
 - webdev-retro: https://github.com/ringavirda/webdev-retro
 - waifu-picker: https://github.com/ringavirda/request-response
@@ -92,15 +93,31 @@ JSON or SQLite depending on `PRINCESS_STORAGE`.
     pnpm --filter @gendev/princess start get young sunset
     PRINCESS_STORAGE=sqlite pnpm --filter @gendev/princess start
 
+### The web: HTML, CSS, the DOM and fetch
+
+`apps/browser-basics` is one page in four stages: `1-html` has the markup,
+`2-css` adds the style, `3-dom` builds the cards in JavaScript and `4-fetch`
+asks a public API for them. Open a stage by its folder with a trailing slash,
+for example http://localhost:8080/2-css/, or open its `index.html` with Live
+Server in VS Code.
+
+    pnpm --filter @gendev/browser-basics start
+    pnpm --filter @gendev/browser-basics dev
+
+`start` serves the folder with http-server on port 8080 and `dev` serves it
+with Vite on port 5173.
+
 ## Templates
 
 The starter projects in `templates/` are copied with tiged:
 
     pnpm dlx tiged ringavirda/gendev-demos/templates/node-ts my-app
     pnpm dlx tiged ringavirda/gendev-demos/templates/monorepo my-repo
+    pnpm dlx tiged ringavirda/gendev-demos/templates/web-page my-page
 
 `node-ts` is one Node.js console app in TypeScript. `monorepo` is a pnpm
-workspace with a library and a console app.
+workspace with a library and a console app. `web-page` is one web page that
+fetches data from a public API and shows it.
 
 [templates/README.md](templates/README.md) says what you need installed, how
 to get a copy and what to try in each one.
@@ -117,9 +134,10 @@ to get a copy and what to try in each one.
 
 ## Tooling
 
-ESLint with typescript-eslint, Prettier, TypeScript and vitest. The CI
-workflow in `.github/workflows/ci.yml` runs lint, build, typecheck and test,
-and builds and checks both templates.
+ESLint with typescript-eslint, Prettier, TypeScript and vitest, and ESLint
+also checks the JavaScript of the pages. The CI workflow in
+`.github/workflows/ci.yml` runs lint, build, typecheck and test, builds and
+checks `node-ts` and `monorepo`, and lints, typechecks and serves `web-page`.
 
 `.vscode/launch.json` has a debug configuration for every app (Run and Debug,
 F5), and `.vscode/tasks.json` builds, starts and tests them from Terminal >

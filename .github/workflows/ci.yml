@@ -47,3 +47,24 @@ jobs:
         working-directory: ${{ runner.temp }}/${{ matrix.template }}
       - run: pnpm test
         working-directory: ${{ runner.temp }}/${{ matrix.template }}
+
+  web-page:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: cp -r templates/web-page "$RUNNER_TEMP/web-page"
+      - run: pnpm install --no-frozen-lockfile
+        working-directory: ${{ runner.temp }}/web-page
+      - run: pnpm lint
+        working-directory: ${{ runner.temp }}/web-page
+      - run: pnpm typecheck
+        working-directory: ${{ runner.temp }}/web-page
+      - run: |
+          timeout 60 pnpm start > server.log 2>&1 &
+          curl --retry 15 --retry-connrefused --retry-delay 1 -fsS -o /dev/null http://127.0.0.1:8090/
+        working-directory: ${{ runner.temp }}/web-page
