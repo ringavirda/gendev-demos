@@ -36,7 +36,9 @@ function addCard(pony) {
 async function loadPage() {
   more.disabled = true;
   const url = new URL(API_URL, location.href);
-  if (page > 0) url.searchParams.set("offset", String(6 * page));
+  if (page > 0) {
+    url.searchParams.set("offset", String(6 * page));
+  }
   status.textContent = "Loading...";
   status.className = "";
   status.hidden = false;
@@ -51,7 +53,9 @@ async function loadPage() {
       end.textContent = "That is all of them.";
       more.replaceWith(end);
     }
-    for (const pony of body.data) addCard(pony);
+    for (const pony of body.data) {
+      addCard(pony);
+    }
     page += 1;
     status.hidden = true;
   } catch (error) {
